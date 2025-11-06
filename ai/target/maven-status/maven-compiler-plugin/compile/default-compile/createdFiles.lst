@@ -1,0 +1,3 @@
+com\apisecurity\ai\AIModule.class
+com\apisecurity\ai\AIResponse.class
+com\apisecurity\ai\AIVulnerability.class

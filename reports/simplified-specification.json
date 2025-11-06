@@ -1,0 +1,36 @@
+{
+  "components" : {
+    "schemas" : 16,
+    "securitySchemes" : 1
+  },
+  "openapi" : "3.1.0",
+  "paths" : {
+    "/account-consents/{consent_id}" : [ "GET", "DELETE" ],
+    "/payment-consents/request" : [ "POST" ],
+    "/account-consents/request" : [ "POST" ],
+    "/product-agreements/{agreement_id}" : [ "GET", "DELETE" ],
+    "/.well-known/jwks.json" : [ "GET" ],
+    "/payments" : [ "POST" ],
+    "/product-agreements" : [ "GET", "POST" ],
+    "/accounts/{account_id}" : [ "GET" ],
+    "/accounts/{account_id}/transactions" : [ "GET" ],
+    "/accounts/{account_id}/close" : [ "PUT" ],
+    "/payments/{payment_id}" : [ "GET" ],
+    "/products" : [ "GET" ],
+    "/" : [ "GET" ],
+    "/health" : [ "GET" ],
+    "/accounts/{account_id}/balances" : [ "GET" ],
+    "/product-agreement-consents/{consent_id}" : [ "GET", "DELETE" ],
+    "/auth/bank-token" : [ "POST" ],
+    "/payment-consents/{consent_id}" : [ "GET", "DELETE" ],
+    "/products/{product_id}" : [ "GET" ],
+    "/accounts/{account_id}/status" : [ "PUT" ],
+    "/accounts" : [ "GET", "POST" ],
+    "/product-agreement-consents/request" : [ "POST" ]
+  },
+  "totalEndpoints" : 28,
+  "info" : {
+    "title" : "Virtual Bank API",
+    "version" : "2.1"
+  }
+}

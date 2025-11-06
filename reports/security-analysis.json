@@ -1,0 +1,1980 @@
+{
+  "validatorResults" : {
+    "GET /products" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /products" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /.well-known/jwks.json" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for POST /account-consents/request" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "openapi_structure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No success responses (200, 201) defined for DELETE /product-agreement-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /account-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No success responses (200, 201) defined for DELETE /account-consents/{consent_id}", "No security defined for DELETE /account-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for POST /auth/bank-token" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /health" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No success responses (200, 201) defined for DELETE /payment-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "schemas" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Property 'destination_account_id' in schema 'AccountCloseRequest' missing 'type'", "Property 'repayment_account_id' in schema 'CloseAgreementRequest' missing 'type'", "Property 'repayment_amount' in schema 'CloseAgreementRequest' missing 'type'", "Property 'expirationDateTime' in schema 'ConsentData' missing 'type'", "Property 'meta' in schema 'ConsentResponse' missing 'type'", "Property 'amount' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'creditor_account' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'creditor_name' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'reference' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'max_uses' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'max_amount_per_payment' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'max_total_amount' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'allowed_creditor_accounts' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'vrp_max_individual_amount' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'vrp_daily_limit' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'vrp_monthly_limit' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'valid_from' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'valid_until' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'reason' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'risk' in schema 'PaymentRequest' missing 'type'", "Property 'meta' in schema 'PaymentResponse' missing 'type'", "Property 'allowed_product_types' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'max_amount' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'valid_until' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'reason' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'term_months' in schema 'ProductAgreementRequest' missing 'type'", "Property 'source_account_id' in schema 'ProductAgreementRequest' missing 'type'" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /products/{product_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for POST /payment-consents/request" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "parameters" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    }
+  },
+  "aiResults" : {
+    "ai_analysis_meta-llama/llama-3.3-70b-instruct" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[Недостаточная валидация данных] /auth/bank-token: В запросе на получение токена банка отсутствует проверка на правильность client_id и client_secret, что может привести к утечке данных. (Severity: высокая)", "[Недостаточная авторизация] /accounts: Для запроса списка счетов используется только токен авторизации, без проверки прав доступа к конкретным счетам. (Severity: средняя)", "[Уязвимость к инъекциям] /accounts/{account_id}/transactions: В параметре from_booking_date_time и to_booking_date_time отсутствует проверка на корректность формата даты, что может привести к ошибкам или уязвимостям. (Severity: высокая)", "[Недостаточная защита чувствительных данных] /account-consents/request: В теле запроса на создание согласия передаются чувствительные данные (client_id, permissions, reason), которые могут быть перехвачены злоумышленником. (Severity: высокая)", "[Недостаточная валидация данных] /payment-consents/request: В запросе на создание запроса согласия на перевод отсутствует проверка на корректность передаваемых данных (amount, debtor_account, creditor_account и т.д.). (Severity: средняя)" ],
+      "details" : {
+        "recommendation" : "Добавить проверку на корректность передаваемых данных",
+        "model" : "meta-llama/llama-3.3-70b-instruct"
+      },
+      "executionTime" : 0
+    },
+    "ai_analysis_meta-llama/llama-3.1-8b-instruct" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[инъекция] /accounts/{account_id}/transactions: В параметрах запроса отсутствует валидация на предмет SQL-инъекций (Severity: высокая)", "[инъекция] /payment-consents/request: В теле запроса отсутствует валидация на предмет SQL-инъекций (Severity: высокая)", "[чувствительные данные] /auth/bank-token: В теле запроса передаются чувствительные данные (client_secret) (Severity: высокая)", "[чувствительные данные] /account-consents/request: В теле запроса передаются чувствительные данные (client_id, client_secret) (Severity: высокая)", "[авторизация] /accounts/{account_id}/transactions: Отсутствует проверка авторизации для доступа к счету (Severity: средняя)", "[авторизация] /payment-consents/request: Отсутствует проверка авторизации для создания согласия на перевод (Severity: средняя)", "[валидация данных] /accounts/{account_id}/transactions: Отсутствует валидация данных в параметрах запроса (Severity: низкая)", "[валидация данных] /payment-consents/request: Отсутствует валидация данных в теле запроса (Severity: низкая)" ],
+      "details" : {
+        "recommendation" : "Ввести валидацию данных в параметрах запроса и теле запроса",
+        "model" : "meta-llama/llama-3.1-8b-instruct"
+      },
+      "executionTime" : 0
+    },
+    "ai_analysis_qwen/qwen-2.5-coder-32b-instruct" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[аутентификация] POST /auth/bank-token: Client_id и client_secret передаются в параметрах запроса (query parameters), что делает их уязвимыми к перехвату через логи, кэширование или атаки MITM. (Severity: высокая)", "[авторизация] GET /accounts: Межбанковские запросы требуют X-Requesting-Bank, но не проверяют, имеет ли запрашивающий банк право на доступ к данным клиента. Это может привести к подделке запросов. (Severity: средняя)", "[инъекции] POST /account-consents/request: Параметр permissions не имеет ограничений на допустимые значения, что может позволить злоумышленнику запросить неограниченные разрешения. (Severity: средняя)", "[валидация данных] POST /accounts: Параметр initial_balance не имеет явной проверки на отрицательные значения или некорректный формат, что может привести к ошибкам при создании счета. (Severity: низкая)", "[чувствительные данные] POST /auth/bank-token: Client_secret передается в открытом виде в запросе, что делает его уязвимым к утечке при неправильной настройке HTTPS или логировании. (Severity: высокая)" ],
+      "details" : {
+        "recommendation" : "Регулярно аудитировать логи и проверять, не сохраняются ли credentials в незащищенных форматах.",
+        "model" : "qwen/qwen-2.5-coder-32b-instruct"
+      },
+      "executionTime" : 0
+    },
+    "ai_analysis_deepseek/deepseek-r1-distill-llama-70b" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[Аутентификация] POST /auth/bank-token: Передача client_id и client_secret через параметры запроса может привести к утечке данных, так как они могут быть логированы или видны в истории запросов. (Severity: высокая)", "[Авторизация] GET /accounts: Отсутствие информации о проверке разрешений (RBAC) может привести к излишним привилегиям и несанкционированному доступу. (Severity: средняя)", "[Валидация данных] GET /accounts/{account_id}/transactions: Параметры from_booking_date_time, to_booking_date_time, page и limit могут быть использованы для атак, если не валидируются и не санитируются должным образом. (Severity: средняя)", "[Чувствительные данные] POST /auth/bank-token: Примеры запросов содержат client_secret и access_token в URL, что может привести к утечке данных. (Severity: высокая)", "[Инъекции] GET /accounts/{account_id}/transactions: Отсутствие информации о защите от SQL инъекций и XSS атак через параметры запроса. (Severity: средняя)" ],
+      "details" : {
+        "recommendation" : "Реализовать защиту от инъекций и атак типа Denial of Service.",
+        "model" : "deepseek/deepseek-r1-distill-llama-70b"
+      },
+      "executionTime" : 0
+    },
+    "ai_analysis_microsoft/wizardlm-2-8x22b" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[Аутентификация] POST /auth/bank-token: Пароль API (client_secret) передается в виде query параметра, что может привести к его логированию на сервере и потенциальному утечке, если не использовать HTTPS. (Severity: Средняя)", "[Валидация данных] POST /account-consents/request: Отсутствует явное указание валидации входных данных, что может привести к атакам типа SQL Injection или другим уязвимостям, связанным с обработкой входных данных. (Severity: Средняя)", "[Чувствительные данные] POST /payment-consents/request: Передача чувствительных данных, таких как номера счетов и суммы платежей, без шифрования или хеширования может привести к их утечке при логировании или в случае несанкционированного доступа. (Severity: Средняя)", "[Авторизация] PUT /accounts/{account_id}/close: Отсутствует явное указание проверки прав пользователя на закрытие счета, что может привести к несанкционированным операциям, если злоумышленник получит доступ к токену. (Severity: Средняя)", "[Авторизация] PUT /accounts/{account_id}/status: Отсутствует явное указание проверки прав пользователя на изменение статуса счета, что может привести к несанкционированным изменениям статуса счета. (Severity: Средняя)" ],
+      "details" : {
+        "recommendation" : "Обеспечить проверку прав доступа на уровне сервера для каждого запроса, чтобы предотвратить несанкционированный доступ к ресурсам и операциям.",
+        "model" : "microsoft/wizardlm-2-8x22b"
+      },
+      "executionTime" : 0
+    }
+  },
+  "testingResults" : {
+    "GET /products" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /products" : "FAILED",
+        "Unauthorized Access Test - GET /products" : "FAILED",
+        "XSS Injection Test - GET /products" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /" : "FAILED",
+        "XSS Injection Test - GET /" : "FAILED",
+        "Unauthorized Access Test - GET /" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /accounts/{account_id}/balances" : "FAILED",
+        "SQL Injection Test - GET /accounts/{account_id}/balances" : "FAILED",
+        "Unauthorized Access Test - GET /accounts/{account_id}/balances" : "FAILED",
+        "IDOR Test - GET /accounts/{account_id}/balances" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /.well-known/jwks.json" : "FAILED",
+        "XSS Injection Test - GET /.well-known/jwks.json" : "FAILED",
+        "Unauthorized Access Test - GET /.well-known/jwks.json" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /accounts/{account_id}" : "FAILED",
+        "Unauthorized Access Test - GET /accounts/{account_id}" : "FAILED",
+        "XSS Injection Test - GET /accounts/{account_id}" : "FAILED",
+        "IDOR Test - GET /accounts/{account_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /payments" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - POST /payments" : "FAILED",
+        "Unauthorized Access Test - POST /payments" : "FAILED",
+        "XSS Injection Test - POST /payments" : "FAILED",
+        "Mass Assignment Test - POST /payments" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - POST /account-consents/request" : "FAILED",
+        "Mass Assignment Test - POST /account-consents/request" : "FAILED",
+        "SQL Injection Test - POST /account-consents/request" : "FAILED",
+        "XSS Injection Test - POST /account-consents/request" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED",
+        "Unauthorized Access Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /product-agreements/{agreement_id}" : "FAILED",
+        "IDOR Test - GET /product-agreements/{agreement_id}" : "FAILED",
+        "Unauthorized Access Test - GET /product-agreements/{agreement_id}" : "FAILED",
+        "SQL Injection Test - GET /product-agreements/{agreement_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - GET /account-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - GET /account-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - GET /account-consents/{consent_id}" : "FAILED",
+        "Unauthorized Access Test - GET /account-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "fuzzing" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /product-agreements" : "FAILED",
+        "XSS Injection Test - GET /product-agreements" : "FAILED",
+        "Unauthorized Access Test - GET /product-agreements" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /payments/{payment_id}" : "FAILED",
+        "IDOR Test - GET /payments/{payment_id}" : "FAILED",
+        "SQL Injection Test - GET /payments/{payment_id}" : "FAILED",
+        "Unauthorized Access Test - GET /payments/{payment_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - POST /accounts" : "FAILED",
+        "Mass Assignment Test - POST /accounts" : "FAILED",
+        "SQL Injection Test - POST /accounts" : "FAILED",
+        "Unauthorized Access Test - POST /accounts" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - DELETE /account-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - DELETE /account-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - DELETE /account-consents/{consent_id}" : "FAILED",
+        "IDOR Test - DELETE /account-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - POST /auth/bank-token" : "FAILED",
+        "Mass Assignment Test - POST /auth/bank-token" : "FAILED",
+        "SQL Injection Test - POST /auth/bank-token" : "FAILED",
+        "XSS Injection Test - POST /auth/bank-token" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /health" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /health" : "FAILED",
+        "Unauthorized Access Test - GET /health" : "FAILED",
+        "SQL Injection Test - GET /health" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - DELETE /product-agreements/{agreement_id}" : "FAILED",
+        "Unauthorized Access Test - DELETE /product-agreements/{agreement_id}" : "FAILED",
+        "IDOR Test - DELETE /product-agreements/{agreement_id}" : "FAILED",
+        "SQL Injection Test - DELETE /product-agreements/{agreement_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "IDOR Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "Unauthorized Access Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "SQL Injection Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "Mass Assignment Test - PUT /accounts/{account_id}/status" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - POST /product-agreement-consents/request" : "FAILED",
+        "SQL Injection Test - POST /product-agreement-consents/request" : "FAILED",
+        "XSS Injection Test - POST /product-agreement-consents/request" : "FAILED",
+        "Mass Assignment Test - POST /product-agreement-consents/request" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - POST /product-agreements" : "FAILED",
+        "XSS Injection Test - POST /product-agreements" : "FAILED",
+        "Mass Assignment Test - POST /product-agreements" : "FAILED",
+        "Unauthorized Access Test - POST /product-agreements" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - GET /payment-consents/{consent_id}" : "FAILED",
+        "Unauthorized Access Test - GET /payment-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - GET /payment-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - GET /payment-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /accounts" : "FAILED",
+        "XSS Injection Test - GET /accounts" : "FAILED",
+        "Unauthorized Access Test - GET /accounts" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - DELETE /payment-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - DELETE /payment-consents/{consent_id}" : "FAILED",
+        "IDOR Test - DELETE /payment-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - DELETE /payment-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - GET /products/{product_id}" : "FAILED",
+        "SQL Injection Test - GET /products/{product_id}" : "FAILED",
+        "XSS Injection Test - GET /products/{product_id}" : "FAILED",
+        "IDOR Test - GET /products/{product_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - GET /accounts/{account_id}/transactions" : "FAILED",
+        "Unauthorized Access Test - GET /accounts/{account_id}/transactions" : "FAILED",
+        "SQL Injection Test - GET /accounts/{account_id}/transactions" : "FAILED",
+        "XSS Injection Test - GET /accounts/{account_id}/transactions" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "IDOR Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "Mass Assignment Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "XSS Injection Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "Unauthorized Access Test - PUT /accounts/{account_id}/close" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - POST /payment-consents/request" : "FAILED",
+        "Mass Assignment Test - POST /payment-consents/request" : "FAILED",
+        "Unauthorized Access Test - POST /payment-consents/request" : "FAILED",
+        "SQL Injection Test - POST /payment-consents/request" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - GET /product-agreement-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - GET /product-agreement-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - GET /product-agreement-consents/{consent_id}" : "FAILED",
+        "IDOR Test - GET /product-agreement-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    }
+  },
+  "generatedAt" : "Thu Nov 06 19:45:20 MSK 2025",
+  "endpointAnalysis" : [ {
+    "endpointName" : "POST /auth/bank-token",
+    "endpointNumber" : 1,
+    "input" : "POST /auth/bank-token",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /accounts",
+    "endpointNumber" : 2,
+    "input" : "GET /accounts",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "POST /accounts",
+    "endpointNumber" : 3,
+    "input" : "POST /accounts",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /accounts/{account_id}",
+    "endpointNumber" : 4,
+    "input" : "GET /accounts/{account_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /accounts/{account_id}/balances",
+    "endpointNumber" : 5,
+    "input" : "GET /accounts/{account_id}/balances",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /accounts/{account_id}/transactions",
+    "endpointNumber" : 6,
+    "input" : "GET /accounts/{account_id}/transactions",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "PUT /accounts/{account_id}/status",
+    "endpointNumber" : 7,
+    "input" : "PUT /accounts/{account_id}/status",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "5 failed tests out of 5",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "PUT /accounts/{account_id}/close",
+    "endpointNumber" : 8,
+    "input" : "PUT /accounts/{account_id}/close",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "5 failed tests out of 5",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "POST /account-consents/request",
+    "endpointNumber" : 9,
+    "input" : "POST /account-consents/request",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /account-consents/{consent_id}",
+    "endpointNumber" : 10,
+    "input" : "GET /account-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "DELETE /account-consents/{consent_id}",
+    "endpointNumber" : 11,
+    "input" : "DELETE /account-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=2, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "POST /payment-consents/request",
+    "endpointNumber" : 12,
+    "input" : "POST /payment-consents/request",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /payment-consents/{consent_id}",
+    "endpointNumber" : 13,
+    "input" : "GET /payment-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "DELETE /payment-consents/{consent_id}",
+    "endpointNumber" : 14,
+    "input" : "DELETE /payment-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "POST /payments",
+    "endpointNumber" : 15,
+    "input" : "POST /payments",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /payments/{payment_id}",
+    "endpointNumber" : 16,
+    "input" : "GET /payments/{payment_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /products",
+    "endpointNumber" : 17,
+    "input" : "GET /products",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /products/{product_id}",
+    "endpointNumber" : 18,
+    "input" : "GET /products/{product_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /product-agreements",
+    "endpointNumber" : 19,
+    "input" : "GET /product-agreements",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "POST /product-agreements",
+    "endpointNumber" : 20,
+    "input" : "POST /product-agreements",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /product-agreements/{agreement_id}",
+    "endpointNumber" : 21,
+    "input" : "GET /product-agreements/{agreement_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "DELETE /product-agreements/{agreement_id}",
+    "endpointNumber" : 22,
+    "input" : "DELETE /product-agreements/{agreement_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "POST /product-agreement-consents/request",
+    "endpointNumber" : 23,
+    "input" : "POST /product-agreement-consents/request",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /product-agreement-consents/{consent_id}",
+    "endpointNumber" : 24,
+    "input" : "GET /product-agreement-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "DELETE /product-agreement-consents/{consent_id}",
+    "endpointNumber" : 25,
+    "input" : "DELETE /product-agreement-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /.well-known/jwks.json",
+    "endpointNumber" : 26,
+    "input" : "GET /.well-known/jwks.json",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /",
+    "endpointNumber" : 27,
+    "input" : "GET /",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  }, {
+    "endpointName" : "GET /health",
+    "endpointNumber" : 28,
+    "input" : "GET /health",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No BOLA issues",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings"
+  } ],
+  "analyzerResults" : {
+    "POST /accounts_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /products_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "idor_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /accounts_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "mass_assignment_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "security_misconfig_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /accounts_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "data_exposure_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /products_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "authentication_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /accounts_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential excessive data exposure: endpoint may return sensitive information" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /payments_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "injection_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /accounts_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "bola_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /payments_injection" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_data_exposure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_idor" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential IDOR vulnerability: direct object references detected" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /accounts_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_mass_assignment" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    }
+  },
+  "totalEndpoints" : 28,
+  "recommendations" : {
+    "/payment-consents/request" : [ "Добавить проверку на корректность передаваемых данных", "Ввести валидацию на предмет SQL-инъекций в тело запроса", "Ввести проверку авторизации для создания согласия на перевод", "Ввести валидацию данных в теле запроса" ],
+    "/account-consents/request" : [ "Использовать HTTPS для шифрования передаваемых данных", "Зашифровать или хранить чувствительные данные отдельно" ],
+    "/accounts/{account_id}/transactions" : [ "Добавить проверку на корректность формата даты", "Ввести валидацию на предмет SQL-инъекций в параметры запроса", "Ввести проверку авторизации для доступа к счету", "Ввести валидацию данных в параметрах запроса" ],
+    "POST /accounts" : [ "Добавить валидацию для initial_balance, чтобы исключить отрицательные значения и некорректные типы данных." ],
+    "POST /auth/bank-token" : [ "Использовать HTTPS и передавать учетные данные через защищенные заголовки или тело запроса.", "Удалять чувствительные данные из примеров и использовать HTTPS для защиты передачи данных.", "Использовать HTTPS для всех запросов и рассмотреть возможность передачи чувствительных данных в заголовках или теле запроса с более безопасным методом аутентификации, например, с использованием HTTP Basic Auth или Bearer Token в заголовке Authentication.", "Передавать credentials в теле запроса (request body) с использованием HTTPS и использовать заголовок Authorization с Basic Auth вместо query parameters.", "Использовать HTTPS и шифровать client_secret перед передачей, а также ограничить логирование параметров запроса." ],
+    "PUT /accounts/{account_id}/status" : [ "Реализовать проверку прав доступа на уровне сервера для каждого запроса, чтобы убедиться, что пользователь имеет право выполнять операцию." ],
+    "GET /accounts" : [ "Реализовать проверку разрешений на основе ролей (RBAC) для каждого endpoint.", "Реализовать строгую проверку соответствия X-Requesting-Bank и client_id в согласии, а также валидацию подписи токена банка." ],
+    "/auth/bank-token" : [ "Добавить проверку на правильность client_id и client_secret", "Зашифровать или хранить чувствительные данные отдельно" ],
+    "GET /accounts/{account_id}/transactions" : [ "Добавить валидацию и санитизацию всех параметров запроса, ограничить возможные значения параметров page и limit.", "Реализовать защиту от инъекций с помощью ORM или подготовленных запросов, санитизировать все входные данные." ],
+    "POST /account-consents/request" : [ "Реализовать строгую валидацию всех входных данных на сервере и использовать параметризованные запросы или ORM для предотвращения SQL Injection.", "Ограничить список разрешений (permissions) только допустимыми значениями и добавить валидацию на стороне сервера." ],
+    "PUT /accounts/{account_id}/close" : [ "Реализовать проверку прав доступа на уровне сервера для каждого запроса, чтобы убедиться, что пользователь имеет право выполнять операцию." ],
+    "POST /payment-consents/request" : [ "Использовать шифрование для передачи чувствительных данных и обеспечить их безопасное хранение на сервере." ],
+    "/accounts" : [ "Добавить проверку прав доступа к счетам" ]
+  },
+  "statistics" : {
+    "riskLevel" : "HIGH",
+    "analyzerFindings" : 25,
+    "validatorFindings" : 40,
+    "aiFindings" : 28
+  }
+}

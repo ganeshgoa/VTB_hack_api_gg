@@ -1,0 +1,5 @@
+com\apisecurity\shared\Configuration.class
+com\apisecurity\shared\OpenAIConfig.class
+com\apisecurity\shared\ContainerApi.class
+com\apisecurity\shared\ModuleResult.class
+com\apisecurity\shared\EndpointAnalysis.class
