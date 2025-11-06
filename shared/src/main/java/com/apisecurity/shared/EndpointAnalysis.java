@@ -11,7 +11,8 @@ public class EndpointAnalysis {
     private String testing;
     private String reportmaker;
     private String recommendation;
-    
+    private String path;          // ← должно быть
+    private String method;  
     public EndpointAnalysis() {}
     
     public EndpointAnalysis(String endpointName, int endpointNumber) {
@@ -48,6 +49,12 @@ public class EndpointAnalysis {
     public String getRecommendation() { return recommendation; }
     public void setRecommendation(String recommendation) { this.recommendation = recommendation; }
     
+    public String getPath() { return path; }
+    public void setPath(String path) { this.path = path; }
+
+    public String getMethod() { return method; }
+    public void setMethod(String method) { this.method = method; } 
+
     @Override
     public String toString() {
         return String.format("EndpointAnalysis{endpointName='%s', endpointNumber=%d}", 

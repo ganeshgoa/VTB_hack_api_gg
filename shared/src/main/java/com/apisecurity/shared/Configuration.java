@@ -8,7 +8,11 @@ public class Configuration {
     private boolean reportmakerEnabled = true;
     private OpenAIConfig aiConfig = new OpenAIConfig();
     
-    // Геттеры и сеттеры
+    // Жёстко заданные параметры для analyzer
+    private String analyzerBaseUrl = "https://sbank.open.bankingapi.ru";
+    private String analyzerClientId = "team154";
+    private String analyzerClientSecret = "rihm8KZlNFqhH4DQ3H0LpK8hwub1Unpa";
+
     public boolean isValidatorEnabled() { return validatorEnabled; }
     public void setValidatorEnabled(boolean validatorEnabled) { this.validatorEnabled = validatorEnabled; }
     
@@ -26,6 +30,10 @@ public class Configuration {
     
     public OpenAIConfig getAiConfig() { return aiConfig; }
     public void setAiConfig(OpenAIConfig aiConfig) { this.aiConfig = aiConfig; }
+
+    public String getAnalyzerClientId() { return analyzerClientId; }
+    public String getAnalyzerBaseUrl() { return analyzerBaseUrl; }
+    public String getAnalyzerClientSecret() { return analyzerClientSecret; }
     
     @Override
     public String toString() {

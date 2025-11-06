@@ -1,37 +1,16 @@
 API SECURITY ANALYSIS SUMMARY
 =============================
 
-Generated: Thu Nov 06 19:45:20 MSK 2025
+Generated: Thu Nov 06 22:11:03 MSK 2025
 
 EXECUTIVE SUMMARY:
 • Total Endpoints: 28
-• Specification Issues: 40
-• Security Vulnerabilities: 25
-• Risk Level: HIGH
+• Specification Issues: 0
+• Security Vulnerabilities: 4
+• Risk Level: LOW
 
 CRITICAL FINDINGS:
-• GET /accounts/{account_id}_data_exposure:
-• GET /accounts/{account_id}/balances_idor:
-• GET /accounts/{account_id}/transactions_data_exposure:
-• POST /account-consents/request_data_exposure:
-• GET /account-consents/{consent_id}_data_exposure:
-• DELETE /account-consents/{consent_id}_idor:
-• PUT /accounts/{account_id}/status_data_exposure:
-• PUT /accounts/{account_id}/status_idor:
-• GET /product-agreement-consents/{consent_id}_idor:
-• DELETE /account-consents/{consent_id}_data_exposure:
-• DELETE /product-agreements/{agreement_id}_idor:
-• GET /accounts/{account_id}/balances_data_exposure:
-• DELETE /product-agreement-consents/{consent_id}_idor:
-• GET /products/{product_id}_idor:
-• POST /accounts_data_exposure:
-• GET /payments/{payment_id}_idor:
-• PUT /accounts/{account_id}/close_idor:
-• GET /accounts_data_exposure:
-• GET /account-consents/{consent_id}_idor:
-• PUT /accounts/{account_id}/close_data_exposure:
-• GET /accounts/{account_id}_idor:
-• GET /payment-consents/{consent_id}_idor:
-• DELETE /payment-consents/{consent_id}_idor:
-• GET /product-agreements/{agreement_id}_idor:
-• GET /accounts/{account_id}/transactions_idor:
+• POST /payment-consents/request_bola:
+• GET /account-consents/{consent_id}_bola:
+• DELETE /account-consents/{consent_id}_bola:
+• GET /products/{product_id}_bola:

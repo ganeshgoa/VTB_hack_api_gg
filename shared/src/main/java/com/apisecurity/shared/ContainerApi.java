@@ -12,8 +12,8 @@ public class ContainerApi {
     private Map<String, List<String>> recommendations = new HashMap<>();
     private List<EndpointAnalysis> analysisTable = new ArrayList<>();
     private Configuration configuration;
-    
-    // Геттеры и сеттеры
+    private Map<String, Object> discoveredParameterValues = new HashMap<>(); // <-- НОВОЕ
+
     public JsonNode getFullSpecification() { return fullSpecification; }
     public void setFullSpecification(JsonNode fullSpecification) { this.fullSpecification = fullSpecification; }
     
@@ -47,8 +47,18 @@ public class ContainerApi {
     public void addRecommendation(String endpoint, String recommendation) {
         this.recommendations.computeIfAbsent(endpoint, k -> new ArrayList<>()).add(recommendation);
     }
+
     public Configuration getConfiguration() { return configuration; }
     public void setConfiguration(Configuration configuration) { 
         this.configuration = configuration;
+    }
+
+    // НОВЫЕ геттер и сеттер
+    public Map<String, Object> getDiscoveredParameterValues() {
+        return discoveredParameterValues;
+    }
+
+    public void setDiscoveredParameterValues(Map<String, Object> discoveredParameterValues) {
+        this.discoveredParameterValues = discoveredParameterValues;
     }
 }

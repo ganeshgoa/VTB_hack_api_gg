@@ -1,8 +1,8 @@
 {
-  "validatorEnabled": true,
+  "validatorEnabled": false,
   "analyzerEnabled": true,
-  "aiEnabled": true,
-  "testingEnabled": true,
+  "aiEnabled": false,
+  "testingEnabled": false,
   "reportmakerEnabled": true,
   "aiConfig": {
     "baseUrl": "https://openrouter.ai/api/v1",
