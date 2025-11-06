@@ -1,3 +1,4 @@
 com/apisecurity/analyzer/checks/BOLACheck.class
 com/apisecurity/analyzer/AnalyzerModule.class
+com/apisecurity/analyzer/checks/BrokenAuthenticationCheck.class
 com/apisecurity/analyzer/checks/SecurityCheck.class

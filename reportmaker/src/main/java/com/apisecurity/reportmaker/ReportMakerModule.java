@@ -344,33 +344,64 @@ public class ReportMakerModule {
         summary.append("API SECURITY ANALYSIS SUMMARY\n")
                .append("=============================\n\n")
                .append("Generated: ").append(new Date()).append("\n\n");
-        
+
         // Статистика
         long totalEndpoints = container.getAnalysisTable().size();
         long validatorFindings = container.getValidatorResults().values().stream()
             .flatMap(r -> r.getFindings().stream()).count();
         long analyzerFindings = container.getAnalyzerResults().values().stream()
             .flatMap(r -> r.getFindings().stream()).count();
-        
+
         summary.append("EXECUTIVE SUMMARY:\n")
                .append("• Total Endpoints: ").append(totalEndpoints).append("\n")
                .append("• Specification Issues: ").append(validatorFindings).append("\n")
                .append("• Security Vulnerabilities: ").append(analyzerFindings).append("\n")
                .append("• Risk Level: ").append(getRiskLevel(analyzerFindings)).append("\n\n");
+
+        // Группируем уязвимости по категории (BOLA, Broken Authentication и т.д.)
+        Map<String, List<String>> findingsByCategory = new LinkedHashMap<>();
         
-        // Критические находки
-        summary.append("CRITICAL FINDINGS:\n");
-        container.getAnalyzerResults().forEach((endpoint, result) -> {
-            if (!result.getFindings().isEmpty()) {
-                summary.append("• ").append(endpoint).append(":\n");
-                for (String finding : result.getFindings()) {
-                    if (finding.toLowerCase().contains("high") || finding.toLowerCase().contains("critical")) {
-                        summary.append("  - ").append(finding).append("\n");
-                    }
+        for (Map.Entry<String, ModuleResult> entry : container.getAnalyzerResults().entrySet()) {
+            ModuleResult result = entry.getValue();
+            if (result.getFindings().isEmpty()) continue;
+
+            // Определяем категорию по ключу или деталям
+            String category = "Other";
+            String endpointKey = entry.getKey();
+
+            // Определяем категорию по суффиксу ключа
+            if (endpointKey.endsWith("_bola")) {
+                category = "Broken Object Level Authorization (BOLA)";
+            } else if (endpointKey.endsWith("_auth")) {
+                category = "Broken Authentication";
+            } else {
+                // Или из деталей
+                if (result.getDetails().containsKey("owasp_category")) {
+                    category = result.getDetails().get("owasp_category").toString();
                 }
             }
-        });
-        
+
+            // Очищаем имя эндпоинта от суффикса
+            String cleanEndpoint = endpointKey.replaceAll("_(bola|auth)$", "");
+
+            // Добавляем в соответствующую группу
+            findingsByCategory.computeIfAbsent(category, k -> new ArrayList<>())
+                              .add("• " + cleanEndpoint);
+        }
+
+        if (findingsByCategory.isEmpty()) {
+            summary.append("CRITICAL FINDINGS:\n• None\n");
+        } else {
+            summary.append("CRITICAL FINDINGS BY CATEGORY:\n\n");
+            for (Map.Entry<String, List<String>> categoryEntry : findingsByCategory.entrySet()) {
+                summary.append("→ ").append(categoryEntry.getKey()).append(":\n");
+                for (String finding : categoryEntry.getValue()) {
+                    summary.append("  ").append(finding).append("\n");
+                }
+                summary.append("\n");
+            }
+        }
+
         return summary.toString();
     }
     

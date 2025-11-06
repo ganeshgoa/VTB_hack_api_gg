@@ -2,6 +2,7 @@
 package com.apisecurity.analyzer;
 
 import com.apisecurity.analyzer.checks.BOLACheck;
+import com.apisecurity.analyzer.checks.BrokenAuthenticationCheck;
 import com.apisecurity.analyzer.checks.SecurityCheck;
 import com.apisecurity.shared.ContainerApi;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,7 +14,8 @@ public class AnalyzerModule {
 
     // Можно расширить список: new MassAssignmentCheck(), new SSRFCheck() и т.д.
     private final List<SecurityCheck> checks = Arrays.asList(
-        new BOLACheck()
+        new BOLACheck(),
+        new BrokenAuthenticationCheck()
     );
 
     public void process(ContainerApi container) {
