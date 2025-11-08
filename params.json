@@ -1,0 +1,9 @@
+{
+  "client_id": ["team154", "team154-5"],
+  "client_secret": ["rihm8KZlNFqhH4DQ3H0LpK8hwub1Unpa"],
+  "account_id": ["acc-2635", "acc-4548"],
+  "consent_id": ["consent-d8f0724a4775"],
+  "payment_id": ["4081781015405069978","4084777c05794a84e0"],
+  "product_id": ["prod-sbank-deposit-001"],
+  "agreement_id": ["agr-789"]
+}

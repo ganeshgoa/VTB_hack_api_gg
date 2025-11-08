@@ -1,15 +1,20 @@
 package com.apisecurity.analyzer;
 
 import com.apisecurity.analyzer.checks.*;
+import com.apisecurity.analyzer.discovery.*;
+import com.apisecurity.analyzer.context.*;
 import com.apisecurity.shared.ContainerApi;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import com.apisecurity.shared.ContainerApi;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+// и другие при необходимости
 
 public class AnalyzerModule {
 
@@ -45,6 +50,22 @@ public class AnalyzerModule {
 
         // 🔽 Сохраняем исходную спецификацию в spec.json
         saveSpecificationToFile(spec);
+
+        // 🔽 Шаг 1: построить сигнатуры
+        SpecAnalyzer specAnalyzer = new SpecAnalyzer(spec);
+        Map<String, EndpointSignature> signatures = specAnalyzer.buildEndpointSignatures(spec);
+
+        // Для отладки:
+        System.out.println("🔍 Built " + signatures.size() + " endpoint signatures:");
+        for (EndpointSignature sig : signatures.values()) {
+            System.out.println("  - " + sig);
+        }
+        
+        // === ШАГ 2: Сбор параметров от пользователя ===
+        ParameterCollector collector = new ParameterCollector(container.getConfiguration(), signatures);
+        ExecutionContext executionContext = collector.collect();
+
+        System.out.println("🔧 ExecutionContext initialized with: " + executionContext.getKeys());
 
         if (spec.has("paths")) {
             for (SecurityCheck check : checks) {
