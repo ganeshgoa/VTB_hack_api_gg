@@ -28,7 +28,8 @@ public class AnalyzerModule {
             new UnrestrictedBusinessFlowAccessCheck(),
             new ServerSideRequestForgeryCheck(),
             new SecurityMisconfigurationCheck(),
-            new ImproperInventoryManagementCheck()
+            new ImproperInventoryManagementCheck(),
+            new UnsafeConsumptionOfApisCheck()
         );
     }
 

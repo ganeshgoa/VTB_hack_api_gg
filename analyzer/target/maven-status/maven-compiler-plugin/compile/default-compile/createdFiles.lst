@@ -7,5 +7,6 @@ com/apisecurity/analyzer/checks/SecurityMisconfigurationCheck.class
 com/apisecurity/analyzer/checks/SecurityCheck.class
 com/apisecurity/analyzer/checks/BrokenFunctionLevelAuthorizationCheck.class
 com/apisecurity/analyzer/checks/BOLACheck.class
+com/apisecurity/analyzer/checks/UnsafeConsumptionOfApisCheck.class
 com/apisecurity/analyzer/AnalyzerModule.class
 com/apisecurity/analyzer/checks/BrokenAuthenticationCheck.class
