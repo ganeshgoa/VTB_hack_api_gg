@@ -23,7 +23,8 @@ public class AnalyzerModule {
             new BOLACheck(),
             new BrokenAuthenticationCheck(),
             new BrokenObjectPropertyLevelAuthorizationCheck(),
-            new UnrestrictedResourceConsumptionCheck()
+            new UnrestrictedResourceConsumptionCheck(),
+            new BrokenFunctionLevelAuthorizationCheck() 
         );
     }
 

@@ -1,6 +1,7 @@
-com/apisecurity/analyzer/checks/BOLACheck.class
 com/apisecurity/analyzer/checks/UnrestrictedResourceConsumptionCheck.class
 com/apisecurity/analyzer/checks/BrokenObjectPropertyLevelAuthorizationCheck.class
+com/apisecurity/analyzer/checks/SecurityCheck.class
+com/apisecurity/analyzer/checks/BrokenFunctionLevelAuthorizationCheck.class
+com/apisecurity/analyzer/checks/BOLACheck.class
 com/apisecurity/analyzer/AnalyzerModule.class
 com/apisecurity/analyzer/checks/BrokenAuthenticationCheck.class
-com/apisecurity/analyzer/checks/SecurityCheck.class
