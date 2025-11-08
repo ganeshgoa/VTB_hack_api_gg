@@ -27,7 +27,8 @@ public class AnalyzerModule {
             new BrokenFunctionLevelAuthorizationCheck(),
             new UnrestrictedBusinessFlowAccessCheck(),
             new ServerSideRequestForgeryCheck(),
-            new SecurityMisconfigurationCheck()
+            new SecurityMisconfigurationCheck(),
+            new ImproperInventoryManagementCheck()
         );
     }
 
