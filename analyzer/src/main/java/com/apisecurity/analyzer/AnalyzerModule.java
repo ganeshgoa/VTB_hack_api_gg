@@ -27,16 +27,16 @@ public class AnalyzerModule {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         this.checks = Arrays.asList(
-            new BOLACheck(),
-            new BrokenAuthenticationCheck(),
-            new BrokenObjectPropertyLevelAuthorizationCheck(),
-            new UnrestrictedResourceConsumptionCheck(),
-            new BrokenFunctionLevelAuthorizationCheck(),
-            new UnrestrictedBusinessFlowAccessCheck(),
-            new ServerSideRequestForgeryCheck(),
-            new SecurityMisconfigurationCheck(),
-            new ImproperInventoryManagementCheck(),
-            new UnsafeConsumptionOfApisCheck()
+            new BOLACheck()
+            //new BrokenAuthenticationCheck(),
+            //new BrokenObjectPropertyLevelAuthorizationCheck(),
+            //new UnrestrictedResourceConsumptionCheck(),
+            //new BrokenFunctionLevelAuthorizationCheck(),
+            //new UnrestrictedBusinessFlowAccessCheck(),
+            //new ServerSideRequestForgeryCheck(),
+            //new SecurityMisconfigurationCheck(),
+            //new ImproperInventoryManagementCheck(),
+            //new UnsafeConsumptionOfApisCheck()
         );
     }
 
@@ -98,7 +98,7 @@ public class AnalyzerModule {
             for (SecurityCheck check : checks) {
                 System.out.println("➡️ Running " + check.getName() + " check...");
                 try {
-                    check.run(spec, container);
+                    check.run(spec, container, dynamicContext);
                 } catch (Exception e) {
                     System.err.println("❌ Error running " + check.getName() + ": " + e.getMessage());
                     e.printStackTrace();
@@ -110,6 +110,10 @@ public class AnalyzerModule {
 
         long endTime = System.currentTimeMillis();
         System.out.println("✅ Security analysis completed in " + (endTime - startTime) + "ms");
+        // После всех проверок:
+        if (executor != null) {
+            executor.saveRequestLog();
+        }
     }
 
     // 🔽 Новый метод: сохранение спецификации в файл

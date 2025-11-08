@@ -13,12 +13,71 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Date;
+import java.io.IOException;
+
 public class ApiExecutor {
 
     private final String baseUrl;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private String accessToken = null;
     private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    // В начале класса ApiExecutor:
+    private static final String REQUESTS_LOG_FILE = "reports/dynamic-requests.log";
+    private final List<String> requestLog = new ArrayList<>();
+
+    // В конец класса ApiExecutor — метод для логирования
+    private void logRequestResponse(String method, String url, Map<String, String> requestHeaders, 
+                                    String requestBody, 
+                                    int statusCode, String responseBody) {
+        StringBuilder logEntry = new StringBuilder();
+        logEntry.append("# ").append(new Date()).append("\n");
+        
+        // Запрос (curl)
+        logEntry.append("### REQUEST\n");
+        logEntry.append("curl -X ").append(method.toUpperCase()).append(" '").append(url).append("'");
+        for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
+            logEntry.append(" \\\n  -H '").append(header.getKey()).append(": ").append(header.getValue()).append("'");
+        }
+        if (requestBody != null && !requestBody.isEmpty()) {
+            String safeBody = requestBody.replace("'", "'\"'\"'");
+            logEntry.append(" \\\n  -d '").append(safeBody).append("'");
+        }
+        logEntry.append("\n\n");
+
+        // Ответ
+        logEntry.append("### RESPONSE (").append(statusCode).append(")\n");
+        if (responseBody != null) {
+            // Ограничиваем длину тела (чтобы не засорять лог)
+            String trimmedBody = responseBody.length() > 1000 
+                ? responseBody.substring(0, 1000) + "..." 
+                : responseBody;
+            logEntry.append(trimmedBody).append("\n");
+        }
+        logEntry.append("\n").append("=".repeat(80)).append("\n\n");
+
+        synchronized (requestLog) {
+            requestLog.add(logEntry.toString());
+        }
+    }
+
+    // Метод для сохранения лога в файл (вызывать в конце анализа)
+    public void saveRequestLog() {
+        if (requestLog.isEmpty()) return;
+        
+        try {
+            Files.createDirectories(Paths.get("reports"));
+            Files.write(Paths.get(REQUESTS_LOG_FILE), requestLog, 
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            System.out.println("📝 Dynamic requests logged to: " + REQUESTS_LOG_FILE);
+        } catch (IOException e) {
+            System.err.println("❌ Failed to write request log: " + e.getMessage());
+        }
+    }
 
     public ApiExecutor(String baseUrl) {
         this.baseUrl = baseUrl.replaceAll("/+$", "");
@@ -88,31 +147,46 @@ public class ApiExecutor {
 
     // === ВЫЗОВ ЛЮБОГО ЭНДПОИНТА ===
 
-    public ApiCallResult callEndpoint(String method, String path, ExecutionContext ctx) {
-        String url = buildUrl(path, ctx);
+   public ApiCallResult callEndpoint(String method, String path, ExecutionContext ctx) {
+    String url = buildUrl(path, ctx);
 
-        try {
-            HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .method(method.toUpperCase(), HttpRequest.BodyPublishers.noBody());
+    try {
+        HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .method(method.toUpperCase(), HttpRequest.BodyPublishers.noBody());
 
-            // Добавляем токен, если есть
-            if (this.accessToken != null) {
-                reqBuilder.header("Authorization", "Bearer " + this.accessToken);
-            }
-
-            // Добавляем другие параметры как заголовки (x-consent-id и т.д.)
-            addHeadersFromContext(reqBuilder, ctx, path);
-
-            HttpRequest request = reqBuilder.build();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return new ApiCallResult(response.statusCode(), response.body());
-
-        } catch (Exception e) {
-            return new ApiCallResult(e);
+        if (this.accessToken != null) {
+            reqBuilder.header("Authorization", "Bearer " + this.accessToken);
         }
+        addHeadersFromContext(reqBuilder, ctx, path);
+
+        HttpRequest request = reqBuilder.build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Только ПОСЛЕ получения ответа:
+        int statusCode = response.statusCode();
+        String responseBody = response.body();
+
+        // Собираем заголовки запроса для лога
+        Map<String, String> requestHeaders = new HashMap<>();
+        if (this.accessToken != null) {
+            requestHeaders.put("Authorization", "Bearer " + this.accessToken);
+        }
+        for (String key : ctx.getKeys()) {
+            if (key.startsWith("x-")) {
+                requestHeaders.put(key, ctx.get(key).toString());
+            }
+        }
+
+        // Логируем ПОСЛЕ всего
+        logRequestResponse(method, url, requestHeaders, null, statusCode, responseBody);
+
+        return new ApiCallResult(statusCode, responseBody);
+
+    } catch (Exception e) {
+        return new ApiCallResult(e);
     }
+}
 
     // === ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ===
 

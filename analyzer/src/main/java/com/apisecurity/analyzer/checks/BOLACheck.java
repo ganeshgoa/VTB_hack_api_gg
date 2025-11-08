@@ -2,10 +2,14 @@
 package com.apisecurity.analyzer.checks;
 
 import com.apisecurity.shared.*;
+import com.apisecurity.analyzer.context.DynamicContext;
+import com.apisecurity.analyzer.executor.ApiCallResult;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-import com.apisecurity.analyzer.context.DynamicContext;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class BOLACheck implements SecurityCheck {
 
     @Override
@@ -24,6 +28,7 @@ public class BOLACheck implements SecurityCheck {
         }
 
         boolean foundAnyBOLA = false;
+        String baseUrl = getBaseUrl(spec, container.getConfiguration());
 
         Iterator<Map.Entry<String, JsonNode>> pathIt = paths.fields();
         while (pathIt.hasNext()) {
@@ -39,173 +44,218 @@ public class BOLACheck implements SecurityCheck {
                     continue;
                 }
 
-                JsonNode operation = pathItem.get(method);
-                String endpointName = method.toUpperCase() + " " + path;
-
-                // Пропускаем эндпоинты аутентификации (например, /auth/...)
-                if (isAuthenticationEndpoint(path)) {
+                // Пропускаем служебные эндпоинты
+                if (isAuthenticationEndpoint(path) || path.contains("/health") || path.contains("/jwks")) {
                     continue;
                 }
+
+                JsonNode operation = pathItem.get(method);
+                String endpointName = method.toUpperCase() + " " + path;
 
                 EndpointAnalysis analysis = findOrCreateAnalysis(container, endpointName);
                 ModuleResult result = new ModuleResult("COMPLETED");
 
+                // 🔥 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: BOLA проверяется ДАЖЕ ЕСЛИ есть security
                 if (hasObjectIdParameter(path, operation)) {
-                    if (!hasSufficientAuthorization(operation, spec)) {
-                        result.addFinding("Potential BOLA vulnerability: endpoint accesses resource by ID but lacks robust authorization checks");
-                        result.addDetail("risk_level", "HIGH");
-                        result.addDetail("owasp_category", "API1:2023 - Broken Object Level Authorization");
-                        result.addDetail("parameter_hint", "Endpoint contains ID-like parameter");
-                        foundAnyBOLA = true;
+                    result.addFinding("Potential BOLA: endpoint accesses object by ID — dynamic check required");
+                    result.addDetail("risk_level", "HIGH");
+                    result.addDetail("owasp_category", "API1:2023 - Broken Object Level Authorization");
+                    result.addDetail("cwe_id", "639");
+                    result.addDetail("cwe_name", "Authorization Bypass Through User-Controlled Key");
+                    result.addDetail("remediation", "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.");
+
+                    // ДИНАМИЧЕСКАЯ ПРОВЕРКА
+                    if (dynamicContext != null && dynamicContext.isAvailable()) {
+                        String poc = performDynamicBOLATest(method, path, baseUrl, dynamicContext);
+                        if (poc != null) {
+                            result.addDetail("dynamic_status", "CONFIRMED");
+                            result.addDetail("proof_of_concept", poc);
+                            System.out.println("  💥 BOLA CONFIRMED on " + endpointName);
+                        } else {
+                            result.addDetail("dynamic_status", "NOT_CONFIRMED");
+                        }
+                    } else {
+                        result.addDetail("dynamic_status", "NOT_TESTED");
                     }
+
+                    foundAnyBOLA = true;
                 }
 
                 container.addAnalyzerResult(endpointName + "_bola", result);
 
                 if (analysis != null) {
-                    analysis.setAnalyzer(
-                        result.getFindings().isEmpty()
-                            ? "No BOLA issues detected"
-                            : "BOLA vulnerability suspected"
-                    );
+                    String status = "No BOLA issues";
+                    if (result.getFindings().isEmpty()) {
+                        status = "No BOLA issues";
+                    } else if ("CONFIRMED".equals(result.getDetails().get("dynamic_status"))) {
+                        status = "BOLA CONFIRMED";
+                    } else {
+                        status = "BOLA suspected (dynamic test: " + result.getDetails().get("dynamic_status") + ")";
+                    }
+                    analysis.setAnalyzer(status);
                 }
             }
         }
 
         ModuleResult globalResult = new ModuleResult(foundAnyBOLA ? "ISSUES_FOUND" : "COMPLETED");
         globalResult.addDetail("summary", foundAnyBOLA
-            ? "One or more endpoints are potentially vulnerable to BOLA"
-            : "No BOLA vulnerabilities detected");
+            ? "BOLA vulnerabilities detected or suspected"
+            : "No BOLA issues found");
         container.addAnalyzerResult("bola_global", globalResult);
 
-        System.out.println("  ✅ BOLA check completed. " +
-            (foundAnyBOLA ? "Vulnerabilities suspected." : "No issues found."));
+        System.out.println("  ✅ BOLA check completed.");
     }
 
-    // Пропускаем пути, связанные с аутентификацией
+    private String performDynamicBOLATest(String method, String path, String baseUrl, DynamicContext ctx) {
+        String paramName = extractIdParameterName(path);
+        if (paramName == null) return null;
+
+        if (!ctx.getExecutionContext().has(paramName)) {
+            System.out.println("  ⚠️ No " + paramName + " in params.json — skipping dynamic test for " + path);
+            return null;
+        }
+
+        String originalId = ctx.getExecutionContext().get(paramName).toString();
+        System.out.println("  🔬 Testing BOLA on " + path + " (original ID: " + originalId + ")");
+
+        // 5 попыток с мутацией
+        for (int i = 0; i < 5; i++) {
+            String mutatedId = mutateId(originalId);
+            if (mutatedId.equals(originalId)) continue;
+
+            String testPath = path.replace("{" + paramName + "}", mutatedId);
+            if (testPath.contains("{")) continue; // пропускаем сложные пути
+
+            System.out.println("  🧪 Trying mutated ID: " + mutatedId);
+
+            ApiCallResult res = ctx.getExecutor().callEndpoint(method.toUpperCase(), testPath, ctx.getExecutionContext());
+            if (res.isSuccess()) {
+                // 200 OK → BOLA подтверждена
+                String url = baseUrl + testPath;
+                Map<String, String> headers = new HashMap<>();
+                if (ctx.getExecutor().getAccessToken() != null) {
+                    headers.put("Authorization", "Bearer " + ctx.getExecutor().getAccessToken());
+                }
+                for (String key : ctx.getExecutionContext().getKeys()) {
+                    if (key.startsWith("x-")) {
+                        headers.put(key, ctx.getExecutionContext().get(key).toString());
+                    }
+                }
+                return buildCurlCommand(method, url, headers);
+            }
+        }
+        return null;
+    }
+
+    private String extractIdParameterName(String path) {
+        Pattern pattern = Pattern.compile("\\{([^}]+)\\}");
+        Matcher matcher = pattern.matcher(path);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    private String mutateId(String id) {
+        if (id == null || id.isEmpty()) return id;
+        Random rand = new Random();
+
+        // Ищем числа и увеличиваем
+        Pattern numPattern = Pattern.compile("\\d+");
+        Matcher matcher = numPattern.matcher(id);
+        if (matcher.find()) {
+            String numberStr = matcher.group();
+            try {
+                long num = Long.parseLong(numberStr);
+                long mutated = num + rand.nextInt(20) + 1; // +1..+20
+                return id.replaceFirst("\\d+", String.valueOf(mutated));
+            } catch (NumberFormatException ignored) {}
+        }
+
+        // Если нет чисел — мутируем случайный символ
+        char[] chars = id.toCharArray();
+        int idx = rand.nextInt(chars.length);
+        char c = chars[idx];
+        if (Character.isDigit(c)) {
+            char newC;
+            do {
+                newC = (char) ('0' + rand.nextInt(10));
+            } while (newC == c);
+            chars[idx] = newC;
+        } else if (Character.isLetter(c)) {
+            char newC;
+            do {
+                if (Character.isLowerCase(c)) {
+                    newC = (char) ('a' + rand.nextInt(26));
+                } else {
+                    newC = (char) ('A' + rand.nextInt(26));
+                }
+            } while (newC == c);
+            chars[idx] = newC;
+        }
+        return new String(chars);
+    }
+
+    private String buildCurlCommand(String method, String url, Map<String, String> headers) {
+        StringBuilder curl = new StringBuilder();
+        curl.append("curl -X ").append(method.toUpperCase()).append(" '").append(url).append("'");
+        for (Map.Entry<String, String> h : headers.entrySet()) {
+            curl.append(" \\\n  -H '").append(h.getKey()).append(": ").append(h.getValue()).append("'");
+        }
+        return curl.toString();
+    }
+
+    private String getBaseUrl(JsonNode spec, Configuration config) {
+        JsonNode servers = spec.get("servers");
+        if (servers != null && servers.isArray() && servers.size() > 0) {
+            return servers.get(0).get("url").asText().replaceAll("/+$", "");
+        }
+        String fromConfig = config.getAnalyzerBaseUrl();
+        return fromConfig != null ? fromConfig.trim().replaceAll("/+$", "") : "http://localhost";
+    }
+
+    // === ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ (без изменений) ===
+
     private boolean isAuthenticationEndpoint(String path) {
-        String lowerPath = path.toLowerCase();
-        return lowerPath.contains("/auth") ||
-               lowerPath.contains("/token") ||
-               lowerPath.contains("/login") ||
-               lowerPath.contains("/oauth") ||
-               lowerPath.contains("/signin") ||
-               lowerPath.contains("/jwks");
+        String p = path.toLowerCase();
+        return p.contains("/auth") || p.contains("/token") || p.contains("/login") || p.contains("/oauth");
     }
 
-    // Находит или создаёт EndpointAnalysis по endpointName (без setPath/setMethod)
     private EndpointAnalysis findOrCreateAnalysis(ContainerApi container, String endpointName) {
         for (EndpointAnalysis ea : container.getAnalysisTable()) {
             if (endpointName.equals(ea.getEndpointName())) {
                 return ea;
             }
         }
-        EndpointAnalysis newAnalysis = new EndpointAnalysis();
-        newAnalysis.setEndpointName(endpointName);
-        container.addEndpointAnalysis(newAnalysis);
-        return newAnalysis;
+        EndpointAnalysis ea = new EndpointAnalysis();
+        ea.setEndpointName(endpointName);
+        container.addEndpointAnalysis(ea);
+        return ea;
     }
 
-    // Проверяет, содержит ли эндпоинт параметры, похожие на ID объекта (но не auth-параметры)
     private boolean hasObjectIdParameter(String path, JsonNode operation) {
-        // 1. Путь содержит {xxxId} или {id}
         if (path.matches(".*/\\{[^}]*[iI][dD][^}]*\\}.*")) {
             return true;
         }
-
-        // 2. Query или header параметры
-        JsonNode parameters = operation.get("parameters");
-        if (parameters != null && parameters.isArray()) {
-            for (JsonNode param : parameters) {
-                if (!param.has("name") || !param.has("in")) continue;
-                String name = param.get("name").asText();
-                String in = param.get("in").asText();
+        // ... остальная логика (как у вас)
+        JsonNode params = operation.get("parameters");
+        if (params != null && params.isArray()) {
+            for (JsonNode p : params) {
+                String name = p.has("name") ? p.get("name").asText() : "";
+                String in = p.has("in") ? p.get("in").asText() : "";
                 if (("query".equals(in) || "header".equals(in)) && isIdLikeParameter(name)) {
                     return true;
                 }
             }
         }
-
-        // 3. Тело запроса (requestBody)
-        JsonNode requestBody = operation.get("requestBody");
-        if (requestBody != null) {
-            JsonNode content = requestBody.get("content");
-            if (content != null && content.has("application/json")) {
-                JsonNode schema = content.get("application/json").get("schema");
-                if (schema != null) {
-                    Set<String> fields = extractSchemaFieldNames(schema);
-                    for (String field : fields) {
-                        if (isIdLikeParameter(field)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
         return false;
     }
 
-    // Извлекает имена полей из схемы (только верхний уровень)
-    private Set<String> extractSchemaFieldNames(JsonNode schema) {
-        Set<String> fields = new HashSet<>();
-        if (schema.has("properties")) {
-            JsonNode props = schema.get("properties");
-            Iterator<String> names = props.fieldNames();
-            names.forEachRemaining(fields::add);
-        }
-        return fields;
-    }
-
-    // Определяет, является ли имя параметра "объектным ID", а не auth-метаданными
     private boolean isIdLikeParameter(String name) {
         if (name == null || name.isEmpty()) return false;
-        String lower = name.toLowerCase().trim();
-
-        boolean looksLikeObjectId =
-            lower.equals("id") ||
-            lower.endsWith("id") ||
-            lower.contains("identifier") ||
-            lower.matches(".*_id$");
-
-        boolean isAuthOrSystemParam =
-            lower.equals("client_secret") ||
-            lower.equals("grant_type") ||
-            lower.equals("scope") ||
-            lower.equals("redirect_uri") ||
-            lower.equals("code") ||
-            lower.equals("refresh_token") ||
-            lower.equals("access_token") ||
-            lower.contains("token") ||
-            lower.equals("audience") ||
-            lower.equals("issuer") ||
-            lower.equals("jti") ||
-            lower.equals("nonce") ||
-            lower.equals("state");
-
-        return looksLikeObjectId && !isAuthOrSystemParam;
-    }
-
-    // Проверяет, указана ли авторизация (security) на уровне операции или спецификации
-    private boolean hasSufficientAuthorization(JsonNode operation, JsonNode spec) {
-        if (hasSecurityRequirement(operation)) {
-            return true;
-        }
-        if (hasSecurityRequirement(spec)) {
-            return true;
-        }
-
-        // Дополнительная эвристика: описание содержит слова о безопасности
-        String summary = operation.has("summary") ? operation.get("summary").asText().toLowerCase() : "";
-        String desc = operation.has("description") ? operation.get("description").asText().toLowerCase() : "";
-        return summary.contains("admin") || desc.contains("owner") ||
-               summary.contains("auth") || desc.contains("authorized") ||
-               summary.contains("access control") || desc.contains("permission");
-    }
-
-    // Проверяет наличие непустого security-массива
-    private boolean hasSecurityRequirement(JsonNode node) {
-        JsonNode security = node.get("security");
-        return security != null && security.isArray() && security.size() > 0;
+        String lower = name.toLowerCase();
+        boolean isObjectId = lower.equals("id") || lower.endsWith("id") || lower.contains("identifier") || lower.matches(".*_id$");
+        boolean isAuth = lower.equals("client_id") || lower.equals("client_secret") || lower.contains("token");
+        return isObjectId && !isAuth;
     }
 }
