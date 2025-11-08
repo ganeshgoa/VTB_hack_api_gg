@@ -24,7 +24,8 @@ public class AnalyzerModule {
             new BrokenAuthenticationCheck(),
             new BrokenObjectPropertyLevelAuthorizationCheck(),
             new UnrestrictedResourceConsumptionCheck(),
-            new BrokenFunctionLevelAuthorizationCheck() 
+            new BrokenFunctionLevelAuthorizationCheck(),
+            new UnrestrictedBusinessFlowAccessCheck()
         );
     }
 

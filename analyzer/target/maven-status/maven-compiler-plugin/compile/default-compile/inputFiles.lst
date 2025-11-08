@@ -3,5 +3,6 @@
 /home/hexagon/work/hackaton/API-SECURITY-ANALYZER/analyzer/src/main/java/com/apisecurity/analyzer/checks/BrokenObjectPropertyLevelAuthorizationCheck.java
 /home/hexagon/work/hackaton/API-SECURITY-ANALYZER/analyzer/src/main/java/com/apisecurity/analyzer/checks/BrokenFunctionLevelAuthorizationCheck.java
 /home/hexagon/work/hackaton/API-SECURITY-ANALYZER/analyzer/src/main/java/com/apisecurity/analyzer/AnalyzerModule.java
+/home/hexagon/work/hackaton/API-SECURITY-ANALYZER/analyzer/src/main/java/com/apisecurity/analyzer/checks/UnrestrictedBusinessFlowAccessCheck.java
 /home/hexagon/work/hackaton/API-SECURITY-ANALYZER/analyzer/src/main/java/com/apisecurity/analyzer/checks/BrokenAuthenticationCheck.java
 /home/hexagon/work/hackaton/API-SECURITY-ANALYZER/analyzer/src/main/java/com/apisecurity/analyzer/checks/SecurityCheck.java
