@@ -25,7 +25,9 @@ public class AnalyzerModule {
             new BrokenObjectPropertyLevelAuthorizationCheck(),
             new UnrestrictedResourceConsumptionCheck(),
             new BrokenFunctionLevelAuthorizationCheck(),
-            new UnrestrictedBusinessFlowAccessCheck()
+            new UnrestrictedBusinessFlowAccessCheck(),
+            new ServerSideRequestForgeryCheck(),
+            new SecurityMisconfigurationCheck()
         );
     }
 
