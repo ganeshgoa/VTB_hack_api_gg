@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class BOLACheck implements SecurityCheck {
 
     @Override
@@ -14,7 +14,7 @@ public class BOLACheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Broken Object Level Authorization (BOLA)...");
 
         JsonNode paths = spec.get("paths");

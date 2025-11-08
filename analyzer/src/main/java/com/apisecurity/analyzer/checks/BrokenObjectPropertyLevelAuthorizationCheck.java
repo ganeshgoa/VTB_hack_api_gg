@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityCheck {
 
     // Поля, которые обычно НЕ должны возвращаться обычным пользователям
@@ -39,7 +39,7 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Broken Object Property Level Authorization (API3:2023)...");
 
         JsonNode paths = spec.get("paths");

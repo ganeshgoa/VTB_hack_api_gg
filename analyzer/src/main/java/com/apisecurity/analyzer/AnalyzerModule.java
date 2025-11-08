@@ -3,6 +3,8 @@ package com.apisecurity.analyzer;
 import com.apisecurity.analyzer.checks.*;
 import com.apisecurity.analyzer.discovery.*;
 import com.apisecurity.analyzer.context.*;
+import com.apisecurity.analyzer.executor.*;
+import com.apisecurity.analyzer.graph.*;
 import com.apisecurity.shared.ContainerApi;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,11 +63,36 @@ public class AnalyzerModule {
             System.out.println("  - " + sig);
         }
         
+        // 🔽 ШАГ 2: Построение графа вызовов
+        DependencyGraph graph = new DependencyGraph(signatures);
+        graph.printGraph(); // для отладки
         // === ШАГ 2: Сбор параметров от пользователя ===
         ParameterCollector collector = new ParameterCollector(container.getConfiguration(), signatures);
-        ExecutionContext executionContext = collector.collect();
+        ExecutionContext ctx = collector.collect();
 
-        System.out.println("🔧 ExecutionContext initialized with: " + executionContext.getKeys());
+        // Получаем baseUrl
+        String baseUrl = container.getAnalyzerBaseUrl().trim().replaceAll("/+$", "");
+        System.out.println("URL: " + baseUrl);
+
+        // Создаём executor
+        ApiExecutor executor = new ApiExecutor(baseUrl);
+
+        // Получаем токен
+        if (executor.obtainToken(spec, ctx)) {
+            System.out.println("🔑 Token ready for dynamic analysis.");
+        } else {
+            System.out.println("⚠️ Token acquisition failed — dynamic checks may be limited.");
+        }
+
+        System.out.println("🔧 ExecutionContext initialized with: " + ctx.getKeys());
+
+        DynamicContext dynamicContext = null;
+        if (executor.getAccessToken() != null) {
+            dynamicContext = new DynamicContext(executor, ctx);
+            System.out.println("⚡ Dynamic analysis enabled.");
+        } else {
+            System.out.println("⚠️ Dynamic analysis disabled: token not available.");
+        }
 
         if (spec.has("paths")) {
             for (SecurityCheck check : checks) {

@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class BrokenFunctionLevelAuthorizationCheck implements SecurityCheck {
 
     // Ключевые слова, указывающие на административные/чувствительные функции
@@ -26,7 +26,7 @@ public class BrokenFunctionLevelAuthorizationCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Broken Function Level Authorization (API5:2023)...");
 
         JsonNode paths = spec.get("paths");

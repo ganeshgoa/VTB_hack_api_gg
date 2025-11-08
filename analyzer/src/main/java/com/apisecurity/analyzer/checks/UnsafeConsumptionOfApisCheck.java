@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class UnsafeConsumptionOfApisCheck implements SecurityCheck {
 
     // Ключевые слова, указывающие на интеграцию с внешними API
@@ -28,7 +28,7 @@ public class UnsafeConsumptionOfApisCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Unsafe Consumption of APIs (API10:2023)...");
 
         String fullSpecText = spec.toString().toLowerCase();

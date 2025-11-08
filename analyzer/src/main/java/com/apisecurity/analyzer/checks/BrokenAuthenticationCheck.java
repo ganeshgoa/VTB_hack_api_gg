@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
 import java.util.regex.Pattern;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class BrokenAuthenticationCheck implements SecurityCheck {
 
     private static final Set<String> AUTH_PATH_KEYWORDS = Set.of(
@@ -30,7 +30,7 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Broken Authentication (API2:2023)...");
 
         JsonNode paths = spec.get("paths");

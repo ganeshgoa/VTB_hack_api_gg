@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class ServerSideRequestForgeryCheck implements SecurityCheck {
 
     // Имена параметров и полей, которые могут содержать URL/URI от клиента
@@ -34,7 +34,7 @@ public class ServerSideRequestForgeryCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Server-Side Request Forgery (API7:2023)...");
 
         JsonNode paths = spec.get("paths");

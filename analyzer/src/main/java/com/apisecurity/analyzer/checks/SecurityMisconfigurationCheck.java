@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class SecurityMisconfigurationCheck implements SecurityCheck {
 
     @Override
@@ -14,7 +14,7 @@ public class SecurityMisconfigurationCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Security Misconfiguration (API8:2023)...");
 
         boolean foundIssues = false;

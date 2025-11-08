@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class UnrestrictedBusinessFlowAccessCheck implements SecurityCheck {
 
     // Чувствительные бизнес-операции (требуют защиты от автоматизации)
@@ -44,7 +44,7 @@ public class UnrestrictedBusinessFlowAccessCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Unrestricted Access to Sensitive Business Flows (API6:2023)...");
 
         JsonNode paths = spec.get("paths");

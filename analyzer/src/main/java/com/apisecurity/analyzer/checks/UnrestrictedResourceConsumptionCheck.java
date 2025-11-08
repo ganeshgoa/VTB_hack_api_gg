@@ -5,7 +5,7 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-
+import com.apisecurity.analyzer.context.DynamicContext;
 public class UnrestrictedResourceConsumptionCheck implements SecurityCheck {
 
     // Ключевые слова, указывающие на рискованные операции
@@ -25,7 +25,7 @@ public class UnrestrictedResourceConsumptionCheck implements SecurityCheck {
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container) {
+    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
         System.out.println("  🔍 Checking Unrestricted Resource Consumption (API4:2023)...");
 
         JsonNode paths = spec.get("paths");

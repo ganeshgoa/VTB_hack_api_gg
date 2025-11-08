@@ -13,7 +13,7 @@ public class ContainerApi {
     private List<EndpointAnalysis> analysisTable = new ArrayList<>();
     private Configuration configuration;
     private Map<String, Object> discoveredParameterValues = new HashMap<>(); // <-- НОВОЕ
-
+    private String baseUrl = "https://sbank.open.bankingapi.ru";
     public JsonNode getFullSpecification() { return fullSpecification; }
     public void setFullSpecification(JsonNode fullSpecification) { this.fullSpecification = fullSpecification; }
     
@@ -60,5 +60,9 @@ public class ContainerApi {
 
     public void setDiscoveredParameterValues(Map<String, Object> discoveredParameterValues) {
         this.discoveredParameterValues = discoveredParameterValues;
+    }
+
+    public String getAnalyzerBaseUrl(){
+        return this.baseUrl;
     }
 }
