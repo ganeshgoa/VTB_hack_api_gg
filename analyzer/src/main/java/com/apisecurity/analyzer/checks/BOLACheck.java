@@ -11,8 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BOLACheck implements SecurityCheck {
-
-    // ⏱️ Задержка между запросами: 150–300 мс (чтобы не триггерить 429)
     private static final int MIN_DELAY_MS = 50;
     private static final int MAX_DELAY_MS = 200;
 
