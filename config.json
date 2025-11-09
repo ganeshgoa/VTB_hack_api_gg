@@ -6,7 +6,7 @@
   "reportmakerEnabled": true,
   "aiConfig": {
     "baseUrl": "https://openrouter.ai/api/v1",
-    "apiKey": "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",
+    "apiKey": "your_openrouter_api_key",
     "models": [
       "deepseek/deepseek-r1-distill-llama-70b", 
       "deepseek/deepseek-r1-0528-qwen3-8b", 

@@ -1,4 +1,4 @@
-com/apisecurity/testing/TestResult.class
-com/apisecurity/testing/TestingModule.class
-com/apisecurity/testing/FuzzingTest.class
-com/apisecurity/testing/SecurityTest.class
+com\apisecurity\testing\SecurityTest.class
+com\apisecurity\testing\FuzzingTest.class
+com\apisecurity\testing\TestingModule.class
+com\apisecurity\testing\TestResult.class

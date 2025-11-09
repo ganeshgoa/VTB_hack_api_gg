@@ -1,0 +1,3674 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "Virtual Bank API",
+    "version" : "2.1"
+  },
+  "paths" : {
+    "/auth/bank-token" : {
+      "post" : {
+        "tags" : [ "0 Аутентификация вызывающей системы", "0 Аутентификация вызывающей системы" ],
+        "summary" : "Create Bank Token",
+        "description" : "## \uD83C\uDFAF Получение токена для работы с API банка\n\n**Этот endpoint - точка входа для всех участников хакатона!**\n\nТокен выдается банком, У КОТОРОГО вы запрашиваете данные.\nКаждый банк подписывает токен своим приватным ключом (RS256).\n\n### Где взять credentials?\n\nПолучите у организаторов хакатона:\n- `client_id` — код вашей команды (например: team200)\n- `client_secret` — ваш секретный ключ (API key)\n\n### Пример запроса:\n\n```bash\n# Получить токен для запросов к VBank\nPOST https://vbank.open.bankingapi.ru/auth/bank-token\n?client_id=team200\n&client_secret=5OAaa4DYzYKfnOU6zbR34ic5qMm7VSMB\n\n# Ответ:\n{\n  \"access_token\": \"eyJ...\",\n  \"token_type\": \"bearer\",\n  \"client_id\": \"team200\",\n  \"expires_in\": 86400\n}\n```\n\n### Использование токена:\n\n```bash\nGET https://vbank.open.bankingapi.ru/accounts\nHeaders:\n  Authorization: Bearer eyJ...\n```\n\n### Важно:\n\n- Токен валиден 24 часа\n- Для каждого банка нужен свой токен (VBank, ABank, SBank)\n- Токен подписан приватным ключом банка (RS256)\n- Публичный ключ: `/.well-known/jwks.json`\n\n### Межбанковые запросы:\n\nДля получения данных клиента из другого банка добавьте:\n```\nX-Requesting-Bank: your_client_id\n```\nИ создайте согласие: `POST /account-consents`",
+        "operationId" : "create_bank_token_auth_bank_token_post",
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "ID команды от организаторов",
+            "title" : "Client Id"
+          },
+          "description" : "ID команды от организаторов",
+          "example" : "team200"
+        }, {
+          "name" : "client_secret",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "Secret команды от организаторов",
+            "title" : "Client Secret"
+          },
+          "description" : "Secret команды от организаторов",
+          "example" : "5OAaa4DYzYKfnOU6zbR34ic5qMm7VSMB"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts" : {
+      "get" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "1. Получить список счетов",
+        "description" : "## \uD83D\uDCB3 Получение списка счетов клиента\n\n### Два режима работы:\n\n#### 1️⃣ Запрос своих счетов (в том же банке)\n```bash\nGET /accounts\nHeaders:\n  Authorization: Bearer <client_token>\n```\n\n#### 2️⃣ Межбанковый запрос (с согласием)\n```bash\nGET /accounts?client_id=cli-ab-001\nHeaders:\n  Authorization: Bearer <bank_token>\n  X-Requesting-Bank: team200\n  X-Consent-Id: <consent_id>\n```\n\n### Ответ содержит:\n- `account_id` — уникальный идентификатор счета\n- `currency` — валюта (RUB, USD, EUR)\n- `account_type` — тип счета (Personal, Business)\n- `nickname` — название счета\n- `servicer` — информация о банке\n\n### ⚠️ Важно для межбанковых запросов:\n1. Сначала создайте согласие: `POST /account-consents/request`\n2. Клиент должен одобрить согласие в банке-владельце счетов\n3. Используйте полученный `consent_id` в заголовке `X-Consent-Id`\n4. Укажите свой банк в `X-Requesting-Bank`\n\n### Примечание:\n- Без согласия межбанковый запрос вернет 403 с подсказкой, как получить согласие\n- Согласие имеет срок действия (обычно 90 дней)",
+        "operationId" : "get_accounts_accounts_get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (например team200-1). Обязателен для межбанковых запросов",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (например team200-1). Обязателен для межбанковых запросов",
+          "example" : "team200-1"
+        }, {
+          "name" : "x-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+            "title" : "X-Consent-Id"
+          },
+          "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+          "example" : "consent-69e75facabba"
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+          "example" : "team200"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "5. Создать счет",
+        "description" : "Создание нового счета\n\nПоддерживаемые типы: checking, savings",
+        "operationId" : "create_account_accounts_post",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "account_type" : {
+                    "type" : "string",
+                    "title" : "Account Type"
+                  },
+                  "initial_balance" : {
+                    "type" : "number",
+                    "title" : "Initial Balance",
+                    "default" : 0
+                  }
+                },
+                "type" : "object",
+                "required" : [ "account_type" ],
+                "title" : "CreateAccountRequest",
+                "description" : "Запрос на создание нового счета"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}" : {
+      "get" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "2. Получить детали счета",
+        "description" : "Получение детальной информации о счете\n\n**Требует:** Client token (для своих счетов) или Bank token с согласием (межбанк)",
+        "operationId" : "get_account_accounts__account_id__get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "account_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "ID счета",
+            "title" : "Account Id"
+          },
+          "description" : "ID счета",
+          "example" : "acc-1010"
+        }, {
+          "name" : "x-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+            "title" : "X-Consent-Id"
+          },
+          "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+          "example" : "consent-69e75facabba"
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+          "example" : "team200"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/balances" : {
+      "get" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "3. Получить баланс счета",
+        "description" : "Получение баланса счета\n\n**Требует:** Client token (для своих счетов) или Bank token с согласием (межбанк)",
+        "operationId" : "get_balances_accounts__account_id__balances_get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "account_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "ID счета",
+            "title" : "Account Id"
+          },
+          "description" : "ID счета",
+          "example" : "acc-1010"
+        }, {
+          "name" : "x-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+            "title" : "X-Consent-Id"
+          },
+          "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+          "example" : "consent-69e75facabba"
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+          "example" : "team200"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/transactions" : {
+      "get" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "4. Получить историю транзакций",
+        "description" : "Получение списка транзакций по счету\n\n**Пагинация:**\n- `page` — номер страницы (по умолчанию: 1)\n- `limit` — количество транзакций на странице (по умолчанию: 50, макс: 500)\n\n**Примеры:**\n- `GET /accounts/acc-1/transactions` — первые 50 транзакций\n- `GET /accounts/acc-1/transactions?page=2&limit=100` — следующие 100 транзакций\n- `GET /accounts/acc-1/transactions?limit=200` — первые 200 транзакций",
+        "operationId" : "get_transactions_accounts__account_id__transactions_get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "account_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "ID счета",
+            "title" : "Account Id"
+          },
+          "description" : "ID счета",
+          "example" : "acc-1010"
+        }, {
+          "name" : "from_booking_date_time",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "From Booking Date Time"
+          },
+          "example" : "2025-01-01T00:00:00Z"
+        }, {
+          "name" : "to_booking_date_time",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "To Booking Date Time"
+          },
+          "example" : "2025-12-31T23:59:59Z"
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "default" : 1,
+            "title" : "Page"
+          },
+          "example" : 1
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "maximum" : 100,
+            "minimum" : 1,
+            "default" : 50,
+            "title" : "Limit"
+          },
+          "example" : 50
+        }, {
+          "name" : "x-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+            "title" : "X-Consent-Id"
+          },
+          "description" : "ID согласия (получите через POST /account-consents/request). Обязателен для межбанковых запросов",
+          "example" : "consent-69e75facabba"
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "ID вашей команды (от организаторов). Укажите для запроса данных из другого банка",
+          "example" : "team200"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/status" : {
+      "put" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "6. Изменить статус счета",
+        "description" : "Изменение статуса счета (закрытие)\n\nДопустимые статусы: active, closed",
+        "operationId" : "update_account_status_accounts__account_id__status_put",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "account_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Account Id"
+          }
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "status" : {
+                    "type" : "string",
+                    "title" : "Status"
+                  }
+                },
+                "type" : "object",
+                "required" : [ "status" ],
+                "title" : "AccountStatusUpdate",
+                "description" : "Обновление статуса счета"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/close" : {
+      "put" : {
+        "tags" : [ "2 Счета и балансы" ],
+        "summary" : "7. Закрыть счет с остатком",
+        "description" : "Закрытие счета с переводом остатка или дарением банку\n\nActions:\n- transfer: перевести остаток на другой счет\n- donate: подарить остаток банку (увеличить capital)",
+        "operationId" : "close_account_with_balance_accounts__account_id__close_put",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "account_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Account Id"
+          }
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "action" : {
+                    "type" : "string",
+                    "title" : "Action"
+                  },
+                  "destination_account_id" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Destination Account Id"
+                  }
+                },
+                "type" : "object",
+                "required" : [ "action" ],
+                "title" : "AccountCloseRequest",
+                "description" : "Запрос на закрытие счета с переводом остатка"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account-consents/request" : {
+      "post" : {
+        "tags" : [ "1 Согласия на доступ к счетам" ],
+        "summary" : "1. Создать согласие",
+        "description" : "Создание согласия на доступ к счетам клиента\n\nСогласия нужны для доступа к данным клиентов из других банков.\nПосле создания согласия вы сможете запрашивать счета, балансы и транзакции.\n\n### Пример использования:\n\n```bash\n# 1. Получить токен банка, где лежат данные клиента\nPOST https://vbank.open.bankingapi.ru/auth/bank-token\n?client_id=team200&client_secret=YOUR_SECRET\n→ {\"access_token\": \"eyJhbG...\"}\n\n# 2. Запросить согласие (авто-одобрение)\nPOST https://vbank.open.bankingapi.ru/account-consents/request\nHeaders:\n  Authorization: Bearer eyJhbG...\n  X-Requesting-Bank: team200\nBody:\n{\n  \"client_id\": \"team200-1\",\n  \"permissions\": [\"ReadAccountsDetail\", \"ReadBalances\"],\n  \"reason\": \"Агрегация счетов для HackAPI\",\n  \"requesting_bank\": \"team200\",\n  \"requesting_bank_name\": \"Team 200 App\"\n}\n\n→ {\"status\": \"approved\", \"consent_id\": \"consent-abc123\", \"auto_approved\": true}\n\n# 3. Запросить данные\nGET https://vbank.open.bankingapi.ru/accounts?client_id=team200-1\nHeaders:\n  Authorization: Bearer eyJhbG...\n  X-Requesting-Bank: team200\n  X-Consent-Id: consent-abc123\n\n→ 200 OK {\"accounts\": [...]}\n```\n\n### ⚠️ Частые ошибки:\n\n1. **X-Requesting-Bank: team200-1** ❌ НЕПРАВИЛЬНО!  \n   Должно быть **team200** (ID команды, без суффикса клиента)\n\n2. **Забыли X-Consent-Id** → получите 403 CONSENT_REQUIRED\n\n3. **Используете client_token вместо bank_token** → 401 Unauthorized\n\n### Что происходит внутри:\n1. Создаётся запрос согласия для клиента\n2. Если банк настроен на авто-одобрение (VBank, ABank):\n   - Согласие одобряется автоматически\n   - Можно сразу запрашивать данные\n3. Если банк требует ручное одобрение (SBank):\n   - Клиент увидит запрос в своём UI\n   - Должен подтвердить через кнопку \"Подписать\"\n   - После этого ваше приложение может запрашивать данные",
+        "operationId" : "request_consent_account_consents_request_post",
+        "parameters" : [ {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID вашей команды (от организаторов). Укажите для создания согласия",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "ID вашей команды (от организаторов). Укажите для создания согласия",
+          "example" : "team200"
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "client_id" : {
+                    "type" : "string",
+                    "title" : "Client Id",
+                    "description" : "Person ID клиента",
+                    "example" : "team200-1"
+                  },
+                  "permissions" : {
+                    "items" : {
+                      "type" : "string"
+                    },
+                    "type" : "array",
+                    "title" : "Permissions",
+                    "description" : "Список разрешений",
+                    "example" : [ "ReadAccountsDetail", "ReadBalances", "ReadTransactionsDetail" ]
+                  },
+                  "reason" : {
+                    "type" : "string",
+                    "title" : "Reason",
+                    "description" : "Причина запроса",
+                    "default" : "",
+                    "example" : "Агрегация счетов для мультибанк-приложения"
+                  },
+                  "requesting_bank" : {
+                    "type" : "string",
+                    "title" : "Requesting Bank",
+                    "description" : "ID вашей команды (БЕЗ суффикса!)",
+                    "default" : "test_bank",
+                    "example" : "team200"
+                  },
+                  "requesting_bank_name" : {
+                    "type" : "string",
+                    "title" : "Requesting Bank Name",
+                    "description" : "Название приложения",
+                    "default" : "Test Bank",
+                    "example" : "Team 200 App"
+                  }
+                },
+                "type" : "object",
+                "required" : [ "client_id", "permissions" ],
+                "title" : "ConsentRequestBody",
+                "description" : "Body для запроса согласия"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account-consents/{consent_id}" : {
+      "get" : {
+        "tags" : [ "1 Согласия на доступ к счетам" ],
+        "summary" : "2. Получить согласие по ID",
+        "description" : "Получение ресурса согласия\n\n**Примечание:** Endpoint доступен без аутентификации для проверки статуса согласия.",
+        "operationId" : "get_account_access_consents_consent_id_account_consents__consent_id__get",
+        "parameters" : [ {
+          "name" : "consent_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "ID согласия",
+            "title" : "Consent Id"
+          },
+          "description" : "ID согласия",
+          "example" : "consent-d8f0724a4775"
+        }, {
+          "name" : "x-fapi-interaction-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Fapi-Interaction-Id"
+          },
+          "example" : "team200"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "data" : {
+                      "properties" : {
+                        "consentId" : {
+                          "type" : "string",
+                          "title" : "Consentid"
+                        },
+                        "status" : {
+                          "type" : "string",
+                          "title" : "Status"
+                        },
+                        "creationDateTime" : {
+                          "type" : "string",
+                          "title" : "Creationdatetime"
+                        },
+                        "statusUpdateDateTime" : {
+                          "type" : "string",
+                          "title" : "Statusupdatedatetime"
+                        },
+                        "permissions" : {
+                          "items" : {
+                            "type" : "string"
+                          },
+                          "type" : "array",
+                          "title" : "Permissions"
+                        },
+                        "expirationDateTime" : {
+                          "anyOf" : [ {
+                            "type" : "string"
+                          }, {
+                            "type" : "null"
+                          } ],
+                          "title" : "Expirationdatetime"
+                        }
+                      },
+                      "type" : "object",
+                      "required" : [ "consentId", "status", "creationDateTime", "statusUpdateDateTime", "permissions" ],
+                      "title" : "ConsentData",
+                      "description" : "Данные согласия в ответе"
+                    },
+                    "links" : {
+                      "type" : "object",
+                      "title" : "Links"
+                    },
+                    "meta" : {
+                      "anyOf" : [ {
+                        "type" : "object"
+                      }, {
+                        "type" : "null"
+                      } ],
+                      "title" : "Meta",
+                      "default" : { }
+                    }
+                  },
+                  "type" : "object",
+                  "required" : [ "data", "links" ],
+                  "title" : "ConsentResponse",
+                  "description" : "Ответ с согласием"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "1 Согласия на доступ к счетам" ],
+        "summary" : "3. Отозвать согласие",
+        "description" : "Удаление ресурса согласия\n\n**Примечание:** Endpoint доступен без обязательной аутентификации для отзыва согласия.",
+        "operationId" : "delete_account_access_consents_consent_id_account_consents__consent_id__delete",
+        "parameters" : [ {
+          "name" : "consent_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "ID согласия для отзыва",
+            "title" : "Consent Id"
+          },
+          "description" : "ID согласия для отзыва",
+          "example" : "consent-d8f0724a4775"
+        }, {
+          "name" : "x-fapi-interaction-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Fapi-Interaction-Id"
+          },
+          "example" : "team200"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful Response"
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment-consents/request" : {
+      "post" : {
+        "tags" : [ "3 Согласия на переводы" ],
+        "summary" : "1. Создать запрос согласия на перевод",
+        "description" : "## \uD83D\uDCB3 Создание запроса на согласие для платежа\n\n**OpenBanking Russia Payment Consents API**\n\n### Поддерживаемые типы:\n\n#### 1. Single Use (одноразовый)\n\n**С указанием получателя (платеж только на этот счет):**\n```json\n{\n  \"requesting_bank\": \"team200\",\n  \"client_id\": \"team200-1\",\n  \"consent_type\": \"single_use\",\n  \"amount\": 5000.00,\n  \"debtor_account\": \"40817810...\",\n  \"creditor_account\": \"40817820...\",\n  \"creditor_name\": \"Иван Иванов\",\n  \"reference\": \"Оплата услуг\"\n}\n```\n\n**БЕЗ указания получателя (платеж любому, но только один раз):**\n```json\n{\n  \"requesting_bank\": \"team200\",\n  \"client_id\": \"team200-1\",\n  \"consent_type\": \"single_use\",\n  \"amount\": 5000.00,\n  \"debtor_account\": \"40817810...\",\n  \"reference\": \"Оплата услуг\"\n}\n```\n\n#### 2. Multi Use (многоразовый)\n\n**С ограничением по получателям:**\n```json\n{\n  \"requesting_bank\": \"team200\",\n  \"client_id\": \"team200-1\",\n  \"consent_type\": \"multi_use\",\n  \"debtor_account\": \"40817810...\",\n  \"max_uses\": 10,\n  \"max_amount_per_payment\": 5000.00,\n  \"max_total_amount\": 50000.00,\n  \"allowed_creditor_accounts\": [\"40817820...\", \"40817830...\"],\n  \"valid_until\": \"2025-12-31T23:59:59\"\n}\n```\n\n**БЕЗ ограничения по получателям (любые счета в рамках лимитов):**\n```json\n{\n  \"requesting_bank\": \"team200\",\n  \"client_id\": \"team200-1\",\n  \"consent_type\": \"multi_use\",\n  \"debtor_account\": \"40817810...\",\n  \"max_uses\": 10,\n  \"max_amount_per_payment\": 5000.00,\n  \"max_total_amount\": 50000.00,\n  \"valid_until\": \"2025-12-31T23:59:59\"\n}\n```\n\n#### 3. VRP (переменные платежи)\n\n**Без ограничений по получателям (типичный случай для подписок):**\n```json\n{\n  \"requesting_bank\": \"team200\",\n  \"client_id\": \"team200-1\",\n  \"consent_type\": \"vrp\",\n  \"debtor_account\": \"40817810...\",\n  \"vrp_max_individual_amount\": 1000.00,\n  \"vrp_daily_limit\": 3000.00,\n  \"vrp_monthly_limit\": 50000.00,\n  \"valid_until\": \"2026-01-01T00:00:00\"\n}\n```",
+        "operationId" : "create_payment_consent_request_payment_consents_request_post",
+        "parameters" : [ {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID вашей команды (от организаторов). Укажите для создания согласия на переводы",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "ID вашей команды (от организаторов). Укажите для создания согласия на переводы",
+          "example" : "team200"
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "requesting_bank" : {
+                    "type" : "string",
+                    "title" : "Requesting Bank",
+                    "description" : "Код банка-инициатора"
+                  },
+                  "client_id" : {
+                    "type" : "string",
+                    "title" : "Client Id",
+                    "description" : "ID клиента"
+                  },
+                  "consent_type" : {
+                    "type" : "string",
+                    "enum" : [ "single_use", "multi_use", "vrp" ],
+                    "title" : "PaymentConsentType",
+                    "description" : "Тип согласия",
+                    "default" : "single_use"
+                  },
+                  "amount" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Amount",
+                    "description" : "Сумма платежа"
+                  },
+                  "currency" : {
+                    "type" : "string",
+                    "title" : "Currency",
+                    "description" : "Валюта",
+                    "default" : "RUB"
+                  },
+                  "debtor_account" : {
+                    "type" : "string",
+                    "title" : "Debtor Account",
+                    "description" : "Счет списания"
+                  },
+                  "creditor_account" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Creditor Account",
+                    "description" : "Счет получателя (для single_use)"
+                  },
+                  "creditor_name" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Creditor Name",
+                    "description" : "Имя получателя"
+                  },
+                  "reference" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Reference",
+                    "description" : "Назначение платежа"
+                  },
+                  "max_uses" : {
+                    "anyOf" : [ {
+                      "type" : "integer"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Max Uses",
+                    "description" : "Макс количество использований"
+                  },
+                  "max_amount_per_payment" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Max Amount Per Payment",
+                    "description" : "Макс сумма одного платежа"
+                  },
+                  "max_total_amount" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Max Total Amount",
+                    "description" : "Макс общая сумма"
+                  },
+                  "allowed_creditor_accounts" : {
+                    "anyOf" : [ {
+                      "items" : {
+                        "type" : "string"
+                      },
+                      "type" : "array"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Allowed Creditor Accounts",
+                    "description" : "Разрешенные счета"
+                  },
+                  "vrp_max_individual_amount" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Vrp Max Individual Amount",
+                    "description" : "VRP: макс сумма платежа"
+                  },
+                  "vrp_daily_limit" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Vrp Daily Limit",
+                    "description" : "VRP: дневной лимит"
+                  },
+                  "vrp_monthly_limit" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Vrp Monthly Limit",
+                    "description" : "VRP: месячный лимит"
+                  },
+                  "valid_from" : {
+                    "anyOf" : [ {
+                      "type" : "string",
+                      "format" : "date-time"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Valid From",
+                    "description" : "Действует с"
+                  },
+                  "valid_until" : {
+                    "anyOf" : [ {
+                      "type" : "string",
+                      "format" : "date-time"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Valid Until",
+                    "description" : "Действует до"
+                  },
+                  "reason" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Reason",
+                    "description" : "Причина запроса"
+                  }
+                },
+                "type" : "object",
+                "required" : [ "requesting_bank", "client_id", "debtor_account" ],
+                "title" : "PaymentConsentRequestData",
+                "description" : "Запрос на создание согласия"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "title" : "Response Create Payment Consent Request Payment Consents Request Post"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment-consents/{consent_id}" : {
+      "get" : {
+        "tags" : [ "3 Согласия на переводы" ],
+        "summary" : "2. Получить согласие по ID",
+        "description" : "## \uD83D\uDCCB Получение согласия на платеж\n\nВозвращает детали согласия со всеми лимитами и использованием",
+        "operationId" : "get_payment_consent_payment_consents__consent_id__get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "consent_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Consent Id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "title" : "Response Get Payment Consent Payment Consents  Consent Id  Get"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "3 Согласия на переводы" ],
+        "summary" : "3. Отозвать согласие",
+        "description" : "## \uD83D\uDDD1️ Отзыв согласия на платеж",
+        "operationId" : "revoke_payment_consent_payment_consents__consent_id__delete",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "consent_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Consent Id"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful Response"
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments" : {
+      "post" : {
+        "tags" : [ "4 Переводы" ],
+        "summary" : "1. Создать платеж",
+        "description" : "## \uD83D\uDCB8 Создание платежа (разовый перевод)\n\n### \uD83D\uDD11 Аутентификация:\n- **С bank_token**: Укажите параметр `client_id` (например: team200-1)\n- **С client_token**: Параметр `client_id` не нужен\n\n### Два типа платежей:\n\n#### 1️⃣ Внутрибанковский перевод (тот же банк)\n```json\n{\n  \"data\": {\n    \"initiation\": {\n      \"instructedAmount\": {\n        \"amount\": \"1000.00\",\n        \"currency\": \"RUB\"\n      },\n      \"debtorAccount\": {\n        \"schemeName\": \"RU.CBR.PAN\",\n        \"identification\": \"40817810099910004312\"\n      },\n      \"creditorAccount\": {\n        \"schemeName\": \"RU.CBR.PAN\",\n        \"identification\": \"40817810099910005423\"\n      }\n    }\n  }\n}\n```\n\n#### 2️⃣ Межбанковский перевод\nДобавьте в `creditorAccount`:\n```json\n{\n  \"creditorAccount\": {\n    \"identification\": \"40817810099910001234\",\n    \"bank_code\": \"abank\"  // Код банка получателя\n  }\n}\n```\n\n### Статусы платежа:\n- `pending` — ожидает обработки\n- `completed` — успешно выполнен\n- `failed` — ошибка (недостаточно средств, счет не найден)\n\n### Проверка статуса:\n```bash\nGET /payments/{payment_id}\n```\n\n### ⚠️ Важно:\n- **bank_token**: укажите `client_id` в параметрах запроса (обязательно)\n- Проверяйте баланс счета перед платежом: `GET /accounts/{account_id}/balances`\n- Счет списания (`debtorAccount`) должен принадлежать авторизованному клиенту\n- Для межбанковых переводов используйте правильный `bank_code`\n- Коды банков: `vbank`, `abank`, `sbank`\n\n### Sandbox особенности:\n- Межбанковые переводы выполняются мгновенно\n- Комиссия не взимается\n- Все валюты конвертируются по курсу 1:1 для упрощения",
+        "operationId" : "create_payment_payments_post",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        }, {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (обязательно для bank_token)",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (обязательно для bank_token)",
+          "example" : "team200-1"
+        }, {
+          "name" : "x-fapi-interaction-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "(Опционально) ID вашей транзакции для отслеживания",
+            "title" : "X-Fapi-Interaction-Id"
+          },
+          "description" : "(Опционально) ID вашей транзакции для отслеживания",
+          "example" : "team200-pay-001"
+        }, {
+          "name" : "x-fapi-customer-ip-address",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "(Опционально) IP адрес клиента",
+            "title" : "X-Fapi-Customer-Ip-Address"
+          },
+          "description" : "(Опционально) IP адрес клиента",
+          "example" : "192.168.1.100"
+        }, {
+          "name" : "x-payment-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "(Опционально) ID согласия на перевод",
+            "title" : "X-Payment-Consent-Id"
+          },
+          "description" : "(Опционально) ID согласия на перевод",
+          "example" : "pcon-49ecbbe683b4"
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "(Опционально) ID вашей команды для межбанковых переводов",
+            "title" : "X-Requesting-Bank"
+          },
+          "description" : "(Опционально) ID вашей команды для межбанковых переводов",
+          "example" : "team200"
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "data" : {
+                    "type" : "object",
+                    "title" : "Data",
+                    "description" : "Содержит initiation"
+                  },
+                  "risk" : {
+                    "anyOf" : [ {
+                      "type" : "object"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Risk",
+                    "default" : { }
+                  }
+                },
+                "type" : "object",
+                "required" : [ "data" ],
+                "title" : "PaymentRequest",
+                "description" : "Запрос создания платежа"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "data" : {
+                      "properties" : {
+                        "paymentId" : {
+                          "type" : "string",
+                          "title" : "Paymentid"
+                        },
+                        "status" : {
+                          "type" : "string",
+                          "title" : "Status"
+                        },
+                        "creationDateTime" : {
+                          "type" : "string",
+                          "title" : "Creationdatetime"
+                        },
+                        "statusUpdateDateTime" : {
+                          "type" : "string",
+                          "title" : "Statusupdatedatetime"
+                        }
+                      },
+                      "type" : "object",
+                      "required" : [ "paymentId", "status", "creationDateTime", "statusUpdateDateTime" ],
+                      "title" : "PaymentData",
+                      "description" : "Данные платежа в ответе"
+                    },
+                    "links" : {
+                      "type" : "object",
+                      "title" : "Links"
+                    },
+                    "meta" : {
+                      "anyOf" : [ {
+                        "type" : "object"
+                      }, {
+                        "type" : "null"
+                      } ],
+                      "title" : "Meta",
+                      "default" : { }
+                    }
+                  },
+                  "type" : "object",
+                  "required" : [ "data", "links" ],
+                  "title" : "PaymentResponse",
+                  "description" : "Ответ с платежом"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/{payment_id}" : {
+      "get" : {
+        "tags" : [ "4 Переводы" ],
+        "summary" : "2. Получить статус платежа",
+        "description" : "Получение статуса платежа",
+        "operationId" : "get_payment_payments__payment_id__get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "payment_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Payment Id"
+          }
+        }, {
+          "name" : "x-fapi-interaction-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "(Опционально) ID вашей транзакции для отслеживания",
+            "title" : "X-Fapi-Interaction-Id"
+          },
+          "description" : "(Опционально) ID вашей транзакции для отслеживания",
+          "example" : "team200-pay-001"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "data" : {
+                      "properties" : {
+                        "paymentId" : {
+                          "type" : "string",
+                          "title" : "Paymentid"
+                        },
+                        "status" : {
+                          "type" : "string",
+                          "title" : "Status"
+                        },
+                        "creationDateTime" : {
+                          "type" : "string",
+                          "title" : "Creationdatetime"
+                        },
+                        "statusUpdateDateTime" : {
+                          "type" : "string",
+                          "title" : "Statusupdatedatetime"
+                        }
+                      },
+                      "type" : "object",
+                      "required" : [ "paymentId", "status", "creationDateTime", "statusUpdateDateTime" ],
+                      "title" : "PaymentData",
+                      "description" : "Данные платежа в ответе"
+                    },
+                    "links" : {
+                      "type" : "object",
+                      "title" : "Links"
+                    },
+                    "meta" : {
+                      "anyOf" : [ {
+                        "type" : "object"
+                      }, {
+                        "type" : "null"
+                      } ],
+                      "title" : "Meta",
+                      "default" : { }
+                    }
+                  },
+                  "type" : "object",
+                  "required" : [ "data", "links" ],
+                  "title" : "PaymentResponse",
+                  "description" : "Ответ с платежом"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products" : {
+      "get" : {
+        "tags" : [ "5 Каталог продуктов" ],
+        "summary" : "1. Получить каталог продуктов",
+        "description" : "## \uD83E\uDDE9 Каталог банковских продуктов\n\n### Получение списка всех доступных продуктов банка\n\n#### Типы продуктов:\n- `deposit` — вклады/депозиты\n- `loan` — кредиты (потребительские, ипотека, авто)\n- `card` — банковские карты (дебетовые, кредитные)\n- `account` — расчетные счета\n\n#### Фильтрация:\n```bash\nGET /products?product_type=deposit\n```\n\n### Ответ содержит:\n- `productId` — уникальный ID продукта\n- `productType` — тип продукта\n- `productName` — название\n- `description` — описание\n- `interestRate` — процентная ставка (для депозитов/кредитов)\n- `minAmount` / `maxAmount` — лимиты по сумме\n- `termMonths` — срок (в месяцах)\n\n### \uD83D\uDE80 Продуктовая воронка:\n\n1. **Каталог** → `GET /products` (этот endpoint)\n2. **Лид** → `POST /customer-leads` (оставить заявку на консультацию)\n3. **Предложение** → `GET /product-offers` (получить персональное предложение)\n4. **Заявка** → `POST /product-application` (подать заявку на продукт)\n5. **Договор** → `POST /product-agreements` (открыть продукт)\n\n### Примеры продуктов в sandbox:\n- **Вклад \"Надежный\"**: 8.5% годовых, от 10,000₽\n- **Потребительский кредит**: 12.9% годовых, до 3,000,000₽\n- **Дебетовая карта \"Свобода\"**: с кэшбэком 2%\n\n### ⚠️ Обратите внимание:\n- Каталог доступен без авторизации (публичная информация)\n- Для подачи заявки требуется авторизация клиента\n- Условия могут отличаться для разных банков",
+        "operationId" : "get_products_products_get",
+        "parameters" : [ {
+          "name" : "product_type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "title" : "Product Type"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{product_id}" : {
+      "get" : {
+        "tags" : [ "5 Каталог продуктов" ],
+        "summary" : "2. Получить детали продукта",
+        "description" : "## \uD83D\uDCCB Детальная информация о продукте\n\nПолучение подробных условий конкретного банковского продукта.\n\n### Пример запроса:\n```bash\nGET /products/prod-vb-deposit-001\n```\n\n### Когда использовать:\n- После выбора продукта из каталога\n- Перед созданием лида или заявки\n- Для отображения деталей на странице продукта\n\n### Полезно для UI:\n- Показать полные условия\n- Вычислить предварительную сумму выплат по кредиту\n- Сравнить с другими продуктами",
+        "operationId" : "get_product_products__product_id__get",
+        "parameters" : [ {
+          "name" : "product_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Product Id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-agreements" : {
+      "get" : {
+        "tags" : [ "7 Договоры с продуктами" ],
+        "summary" : "1. Получить список договоров",
+        "description" : "Получить список договоров клиента\n\nВозвращает все активные договоры с продуктами (депозиты, кредиты, карты)\n\n### \uD83D\uDD11 Аутентификация:\n- **bank_token**: укажите `client_id` в query параметре\n- **client_token**: `client_id` определится автоматически\n\n### Для межбанковых запросов:\n- Требуется заголовок `x-product-agreement-consent-id`\n- Требуется заголовок `x-requesting-bank`\n- Согласие должно иметь разрешение `read_product_agreements`",
+        "operationId" : "get_agreements_product_agreements_get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (обязательно для bank_token)",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (обязательно для bank_token)",
+          "example" : "team200-1"
+        }, {
+          "name" : "x-product-agreement-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Product-Agreement-Consent-Id"
+          }
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Requesting-Bank"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "7 Договоры с продуктами" ],
+        "summary" : "2. Открыть продукт",
+        "description" : "Открыть договор с продуктом (депозит, кредит, карта)\n\n- Депозит: создается счет, деньги списываются с основного счета\n- Кредит: проверяется капитал банка, создается счет с кредитными средствами\n- Карта: создается счет с лимитом\n\n### \uD83C\uDFAF Скоринг для кредитов:\nМаксимальная **СУММАРНАЯ** сумма всех активных кредитов зависит от сегмента клиента:\n- **student** (студент): до 900,000₽ (30% от лимита)\n- **pensioner** (пенсионер): до 1,200,000₽ (40%)\n- **employee** (сотрудник): до 1,800,000₽ (60%)\n- **entrepreneur** (ИП): до 2,400,000₽ (80%)\n- **vip**: до 3,000,000₽ (100%)\n- **business** (бизнес): до 3,000,000₽ (100%)\n\n⚠️ Проверяется сумма ВСЕХ активных кредитов клиента!\n\n### \uD83D\uDD11 Аутентификация:\n- **bank_token**: укажите `client_id` в query параметре\n- **client_token**: `client_id` определится автоматически\n\n### Для межбанковых запросов:\n- Требуется заголовок `x-product-agreement-consent-id`\n- Требуется заголовок `x-requesting-bank`\n- Согласие должно иметь разрешение `open_product_agreements`\n- Сумма не должна превышать `max_amount` согласия\n- Тип продукта должен быть в списке `allowed_product_types`",
+        "operationId" : "create_agreement_product_agreements_post",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (обязательно для bank_token)",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (обязательно для bank_token)",
+          "example" : "team200-1"
+        }, {
+          "name" : "x-product-agreement-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Product-Agreement-Consent-Id"
+          }
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Requesting-Bank"
+          }
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "product_id" : {
+                    "type" : "string",
+                    "title" : "Product Id",
+                    "description" : "ID продукта из каталога",
+                    "example" : "prod-vbank-deposit-001"
+                  },
+                  "amount" : {
+                    "type" : "number",
+                    "title" : "Amount",
+                    "description" : "Сумма продукта (депозита, кредита, лимита карты)",
+                    "example" : 50000.0
+                  },
+                  "term_months" : {
+                    "anyOf" : [ {
+                      "type" : "integer"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Term Months",
+                    "description" : "Срок в месяцах (для депозитов и кредитов)",
+                    "example" : 12
+                  },
+                  "source_account_id" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Source Account Id",
+                    "description" : "Номер счета для списания средств (обязательно для депозитов и карт, не нужно для кредитов)",
+                    "example" : "40817810200010318134"
+                  }
+                },
+                "type" : "object",
+                "required" : [ "product_id", "amount" ],
+                "title" : "ProductAgreementRequest",
+                "description" : "Запрос на открытие продукта"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-agreements/{agreement_id}" : {
+      "get" : {
+        "tags" : [ "7 Договоры с продуктами" ],
+        "summary" : "3. Получить детали договора",
+        "description" : "Получить детали договора\n\n### \uD83D\uDD11 Аутентификация:\n- **bank_token**: укажите `client_id` в query параметре\n- **client_token**: `client_id` определится автоматически\n\n### Для межбанковых запросов:\n- Требуется заголовок `x-product-agreement-consent-id`\n- Требуется заголовок `x-requesting-bank`\n- Согласие должно иметь разрешение `read_product_agreements`",
+        "operationId" : "get_agreement_product_agreements__agreement_id__get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "agreement_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Agreement Id"
+          }
+        }, {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (обязательно для bank_token)",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (обязательно для bank_token)",
+          "example" : "team200-1"
+        }, {
+          "name" : "x-product-agreement-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Product-Agreement-Consent-Id"
+          }
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Requesting-Bank"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "7 Договоры с продуктами" ],
+        "summary" : "4. Закрыть договор",
+        "description" : "Закрыть договор\n\n- Депозит: закрыть счет\n- Кредит: погасить задолженность из указанного счета\n- Карта: заблокировать\n\n### \uD83D\uDD11 Аутентификация:\n- **bank_token**: укажите `client_id` в query параметре\n- **client_token**: `client_id` определится автоматически\n\n### Для межбанковых запросов:\n- Требуется заголовок `x-product-agreement-consent-id`\n- Требуется заголовок `x-requesting-bank`\n- Согласие должно иметь разрешение `close_product_agreements`",
+        "operationId" : "close_agreement_product_agreements__agreement_id__delete",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "agreement_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Agreement Id"
+          }
+        }, {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (обязательно для bank_token)",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (обязательно для bank_token)",
+          "example" : "team200-1"
+        }, {
+          "name" : "x-product-agreement-consent-id",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Product-Agreement-Consent-Id"
+          }
+        }, {
+          "name" : "x-requesting-bank",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "X-Requesting-Bank"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "anyOf" : [ {
+                  "properties" : {
+                    "repayment_account_id" : {
+                      "anyOf" : [ {
+                        "type" : "string"
+                      }, {
+                        "type" : "null"
+                      } ],
+                      "title" : "Repayment Account Id"
+                    },
+                    "repayment_amount" : {
+                      "anyOf" : [ {
+                        "type" : "number"
+                      }, {
+                        "type" : "null"
+                      } ],
+                      "title" : "Repayment Amount"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "CloseAgreementRequest",
+                  "description" : "Запрос на закрытие договора с погашением"
+                }, {
+                  "type" : "null"
+                } ],
+                "title" : "Request"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-agreement-consents/request" : {
+      "post" : {
+        "tags" : [ "6 Согласия на управление договорами" ],
+        "summary" : "1. Создать запрос согласия на управление договорами",
+        "description" : "## \uD83D\uDCCB Создание запроса на согласие для управления договорами\n\n**OpenBanking Russia Products API Extension**\n\n### \uD83D\uDD11 Аутентификация:\n- **bank_token** (type=\"team\"): укажите `client_id` в query параметре\n- **client_token** (type=\"client\"): `client_id` определится автоматически\n\n### Use Case:\nФинансовый агрегатор или маркетплейс хочет:\n- Показывать все продукты клиента из разных банков\n- Открывать депозиты/карты от имени клиента\n- Закрывать неактуальные договоры\n\n### Пример запроса:\n```json\n{\n  \"requesting_bank\": \"team200\",\n  \"client_id\": \"team200-1\",\n  \"read_product_agreements\": true,\n  \"open_product_agreements\": true,\n  \"close_product_agreements\": false,\n  \"allowed_product_types\": [\"deposit\", \"card\"],\n  \"max_amount\": 1000000.00,\n  \"valid_until\": \"2025-12-31T23:59:59\",\n  \"reason\": \"Финансовый агрегатор для управления продуктами\"\n}\n```\n\n### Разрешения:\n- `read_product_agreements`: просмотр списка договоров (депозиты, кредиты, карты)\n- `open_product_agreements`: открытие новых продуктов\n- `close_product_agreements`: закрытие существующих договоров\n\n### Ограничения:\n- `allowed_product_types`: только указанные типы продуктов\n- `max_amount`: макс сумма для открытия одного продукта",
+        "operationId" : "create_product_agreement_consent_request_product_agreement_consents_request_post",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "client_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "description" : "ID клиента (обязательно для bank_token)",
+            "title" : "Client Id"
+          },
+          "description" : "ID клиента (обязательно для bank_token)",
+          "example" : "team200-1"
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "requesting_bank" : {
+                    "type" : "string",
+                    "title" : "Requesting Bank",
+                    "description" : "Код банка-инициатора"
+                  },
+                  "client_id" : {
+                    "type" : "string",
+                    "title" : "Client Id",
+                    "description" : "ID клиента"
+                  },
+                  "read_product_agreements" : {
+                    "type" : "boolean",
+                    "title" : "Read Product Agreements",
+                    "description" : "Читать список договоров",
+                    "default" : false
+                  },
+                  "open_product_agreements" : {
+                    "type" : "boolean",
+                    "title" : "Open Product Agreements",
+                    "description" : "Открывать новые договоры",
+                    "default" : false
+                  },
+                  "close_product_agreements" : {
+                    "type" : "boolean",
+                    "title" : "Close Product Agreements",
+                    "description" : "Закрывать договоры",
+                    "default" : false
+                  },
+                  "allowed_product_types" : {
+                    "anyOf" : [ {
+                      "items" : {
+                        "type" : "string"
+                      },
+                      "type" : "array"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Allowed Product Types",
+                    "description" : "Разрешенные типы продуктов: deposit, card, credit"
+                  },
+                  "max_amount" : {
+                    "anyOf" : [ {
+                      "type" : "number"
+                    }, {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Max Amount",
+                    "description" : "Макс сумма открытия продукта"
+                  },
+                  "valid_until" : {
+                    "anyOf" : [ {
+                      "type" : "string",
+                      "format" : "date-time"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Valid Until",
+                    "description" : "Действует до"
+                  },
+                  "reason" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "null"
+                    } ],
+                    "title" : "Reason",
+                    "description" : "Причина запроса"
+                  }
+                },
+                "type" : "object",
+                "required" : [ "requesting_bank", "client_id" ],
+                "title" : "ProductAgreementConsentRequestData",
+                "description" : "Запрос на создание согласия для управления договорами"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "title" : "Response Create Product Agreement Consent Request Product Agreement Consents Request Post"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-agreement-consents/{consent_id}" : {
+      "get" : {
+        "tags" : [ "6 Согласия на управление договорами" ],
+        "summary" : "2. Получить согласие по ID",
+        "description" : "## \uD83D\uDCCB Получение согласия на управление договорами",
+        "operationId" : "get_product_agreement_consent_product_agreement_consents__consent_id__get",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "consent_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Consent Id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "title" : "Response Get Product Agreement Consent Product Agreement Consents  Consent Id  Get"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "6 Согласия на управление договорами" ],
+        "summary" : "3. Отозвать согласие",
+        "description" : "## \uD83D\uDDD1️ Отзыв согласия на управление договорами",
+        "operationId" : "revoke_product_agreement_consent_product_agreement_consents__consent_id__delete",
+        "security" : [ {
+          "HTTPBearer" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "consent_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "title" : "Consent Id"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful Response"
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "detail" : {
+                      "items" : {
+                        "properties" : {
+                          "loc" : {
+                            "items" : {
+                              "anyOf" : [ {
+                                "type" : "string"
+                              }, {
+                                "type" : "integer"
+                              } ]
+                            },
+                            "type" : "array",
+                            "title" : "Location"
+                          },
+                          "msg" : {
+                            "type" : "string",
+                            "title" : "Message"
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "title" : "Error Type"
+                          }
+                        },
+                        "type" : "object",
+                        "required" : [ "loc", "msg", "type" ],
+                        "title" : "ValidationError"
+                      },
+                      "type" : "array",
+                      "title" : "Detail"
+                    }
+                  },
+                  "type" : "object",
+                  "title" : "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/jwks.json" : {
+      "get" : {
+        "tags" : [ "Technical: Well-Known" ],
+        "summary" : "Get Jwks",
+        "description" : "JWKS endpoint - публичные ключи банка\n\nOpenID Connect Discovery\nRFC 7517 - JSON Web Key (JWK)\n\nИспользуется другими банками для проверки JWT подписей\nпри межбанковских запросах.",
+        "operationId" : "get_jwks__well_known_jwks_json_get",
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/" : {
+      "get" : {
+        "summary" : "Root",
+        "description" : "Root endpoint",
+        "operationId" : "root__get",
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health" : {
+      "get" : {
+        "summary" : "Health",
+        "description" : "Health check endpoint",
+        "operationId" : "health_health_get",
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "AccountCloseRequest" : {
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "title" : "Action"
+          },
+          "destination_account_id" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Destination Account Id"
+          }
+        },
+        "type" : "object",
+        "required" : [ "action" ],
+        "title" : "AccountCloseRequest",
+        "description" : "Запрос на закрытие счета с переводом остатка"
+      },
+      "AccountStatusUpdate" : {
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "title" : "Status"
+          }
+        },
+        "type" : "object",
+        "required" : [ "status" ],
+        "title" : "AccountStatusUpdate",
+        "description" : "Обновление статуса счета"
+      },
+      "CloseAgreementRequest" : {
+        "properties" : {
+          "repayment_account_id" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Repayment Account Id"
+          },
+          "repayment_amount" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Repayment Amount"
+          }
+        },
+        "type" : "object",
+        "title" : "CloseAgreementRequest",
+        "description" : "Запрос на закрытие договора с погашением"
+      },
+      "ConsentData" : {
+        "properties" : {
+          "consentId" : {
+            "type" : "string",
+            "title" : "Consentid"
+          },
+          "status" : {
+            "type" : "string",
+            "title" : "Status"
+          },
+          "creationDateTime" : {
+            "type" : "string",
+            "title" : "Creationdatetime"
+          },
+          "statusUpdateDateTime" : {
+            "type" : "string",
+            "title" : "Statusupdatedatetime"
+          },
+          "permissions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array",
+            "title" : "Permissions"
+          },
+          "expirationDateTime" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Expirationdatetime"
+          }
+        },
+        "type" : "object",
+        "required" : [ "consentId", "status", "creationDateTime", "statusUpdateDateTime", "permissions" ],
+        "title" : "ConsentData",
+        "description" : "Данные согласия в ответе"
+      },
+      "ConsentRequestBody" : {
+        "properties" : {
+          "client_id" : {
+            "type" : "string",
+            "title" : "Client Id",
+            "description" : "Person ID клиента",
+            "example" : "team200-1"
+          },
+          "permissions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array",
+            "title" : "Permissions",
+            "description" : "Список разрешений",
+            "example" : [ "ReadAccountsDetail", "ReadBalances", "ReadTransactionsDetail" ]
+          },
+          "reason" : {
+            "type" : "string",
+            "title" : "Reason",
+            "description" : "Причина запроса",
+            "default" : "",
+            "example" : "Агрегация счетов для мультибанк-приложения"
+          },
+          "requesting_bank" : {
+            "type" : "string",
+            "title" : "Requesting Bank",
+            "description" : "ID вашей команды (БЕЗ суффикса!)",
+            "default" : "test_bank",
+            "example" : "team200"
+          },
+          "requesting_bank_name" : {
+            "type" : "string",
+            "title" : "Requesting Bank Name",
+            "description" : "Название приложения",
+            "default" : "Test Bank",
+            "example" : "Team 200 App"
+          }
+        },
+        "type" : "object",
+        "required" : [ "client_id", "permissions" ],
+        "title" : "ConsentRequestBody",
+        "description" : "Body для запроса согласия"
+      },
+      "ConsentResponse" : {
+        "properties" : {
+          "data" : {
+            "properties" : {
+              "consentId" : {
+                "type" : "string",
+                "title" : "Consentid"
+              },
+              "status" : {
+                "type" : "string",
+                "title" : "Status"
+              },
+              "creationDateTime" : {
+                "type" : "string",
+                "title" : "Creationdatetime"
+              },
+              "statusUpdateDateTime" : {
+                "type" : "string",
+                "title" : "Statusupdatedatetime"
+              },
+              "permissions" : {
+                "items" : {
+                  "type" : "string"
+                },
+                "type" : "array",
+                "title" : "Permissions"
+              },
+              "expirationDateTime" : {
+                "anyOf" : [ {
+                  "type" : "string"
+                }, {
+                  "type" : "null"
+                } ],
+                "title" : "Expirationdatetime"
+              }
+            },
+            "type" : "object",
+            "required" : [ "consentId", "status", "creationDateTime", "statusUpdateDateTime", "permissions" ],
+            "title" : "ConsentData",
+            "description" : "Данные согласия в ответе"
+          },
+          "links" : {
+            "type" : "object",
+            "title" : "Links"
+          },
+          "meta" : {
+            "anyOf" : [ {
+              "type" : "object"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Meta",
+            "default" : { }
+          }
+        },
+        "type" : "object",
+        "required" : [ "data", "links" ],
+        "title" : "ConsentResponse",
+        "description" : "Ответ с согласием"
+      },
+      "CreateAccountRequest" : {
+        "properties" : {
+          "account_type" : {
+            "type" : "string",
+            "title" : "Account Type"
+          },
+          "initial_balance" : {
+            "type" : "number",
+            "title" : "Initial Balance",
+            "default" : 0
+          }
+        },
+        "type" : "object",
+        "required" : [ "account_type" ],
+        "title" : "CreateAccountRequest",
+        "description" : "Запрос на создание нового счета"
+      },
+      "HTTPValidationError" : {
+        "properties" : {
+          "detail" : {
+            "items" : {
+              "properties" : {
+                "loc" : {
+                  "items" : {
+                    "anyOf" : [ {
+                      "type" : "string"
+                    }, {
+                      "type" : "integer"
+                    } ]
+                  },
+                  "type" : "array",
+                  "title" : "Location"
+                },
+                "msg" : {
+                  "type" : "string",
+                  "title" : "Message"
+                },
+                "type" : {
+                  "type" : "string",
+                  "title" : "Error Type"
+                }
+              },
+              "type" : "object",
+              "required" : [ "loc", "msg", "type" ],
+              "title" : "ValidationError"
+            },
+            "type" : "array",
+            "title" : "Detail"
+          }
+        },
+        "type" : "object",
+        "title" : "HTTPValidationError"
+      },
+      "PaymentConsentRequestData" : {
+        "properties" : {
+          "requesting_bank" : {
+            "type" : "string",
+            "title" : "Requesting Bank",
+            "description" : "Код банка-инициатора"
+          },
+          "client_id" : {
+            "type" : "string",
+            "title" : "Client Id",
+            "description" : "ID клиента"
+          },
+          "consent_type" : {
+            "type" : "string",
+            "enum" : [ "single_use", "multi_use", "vrp" ],
+            "title" : "PaymentConsentType",
+            "description" : "Тип согласия",
+            "default" : "single_use"
+          },
+          "amount" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Amount",
+            "description" : "Сумма платежа"
+          },
+          "currency" : {
+            "type" : "string",
+            "title" : "Currency",
+            "description" : "Валюта",
+            "default" : "RUB"
+          },
+          "debtor_account" : {
+            "type" : "string",
+            "title" : "Debtor Account",
+            "description" : "Счет списания"
+          },
+          "creditor_account" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Creditor Account",
+            "description" : "Счет получателя (для single_use)"
+          },
+          "creditor_name" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Creditor Name",
+            "description" : "Имя получателя"
+          },
+          "reference" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Reference",
+            "description" : "Назначение платежа"
+          },
+          "max_uses" : {
+            "anyOf" : [ {
+              "type" : "integer"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Max Uses",
+            "description" : "Макс количество использований"
+          },
+          "max_amount_per_payment" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Max Amount Per Payment",
+            "description" : "Макс сумма одного платежа"
+          },
+          "max_total_amount" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Max Total Amount",
+            "description" : "Макс общая сумма"
+          },
+          "allowed_creditor_accounts" : {
+            "anyOf" : [ {
+              "items" : {
+                "type" : "string"
+              },
+              "type" : "array"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Allowed Creditor Accounts",
+            "description" : "Разрешенные счета"
+          },
+          "vrp_max_individual_amount" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Vrp Max Individual Amount",
+            "description" : "VRP: макс сумма платежа"
+          },
+          "vrp_daily_limit" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Vrp Daily Limit",
+            "description" : "VRP: дневной лимит"
+          },
+          "vrp_monthly_limit" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Vrp Monthly Limit",
+            "description" : "VRP: месячный лимит"
+          },
+          "valid_from" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "format" : "date-time"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Valid From",
+            "description" : "Действует с"
+          },
+          "valid_until" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "format" : "date-time"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Valid Until",
+            "description" : "Действует до"
+          },
+          "reason" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Reason",
+            "description" : "Причина запроса"
+          }
+        },
+        "type" : "object",
+        "required" : [ "requesting_bank", "client_id", "debtor_account" ],
+        "title" : "PaymentConsentRequestData",
+        "description" : "Запрос на создание согласия"
+      },
+      "PaymentConsentType" : {
+        "type" : "string",
+        "enum" : [ "single_use", "multi_use", "vrp" ],
+        "title" : "PaymentConsentType",
+        "description" : "Типы согласий на платежи"
+      },
+      "PaymentData" : {
+        "properties" : {
+          "paymentId" : {
+            "type" : "string",
+            "title" : "Paymentid"
+          },
+          "status" : {
+            "type" : "string",
+            "title" : "Status"
+          },
+          "creationDateTime" : {
+            "type" : "string",
+            "title" : "Creationdatetime"
+          },
+          "statusUpdateDateTime" : {
+            "type" : "string",
+            "title" : "Statusupdatedatetime"
+          }
+        },
+        "type" : "object",
+        "required" : [ "paymentId", "status", "creationDateTime", "statusUpdateDateTime" ],
+        "title" : "PaymentData",
+        "description" : "Данные платежа в ответе"
+      },
+      "PaymentRequest" : {
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "title" : "Data",
+            "description" : "Содержит initiation"
+          },
+          "risk" : {
+            "anyOf" : [ {
+              "type" : "object"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Risk",
+            "default" : { }
+          }
+        },
+        "type" : "object",
+        "required" : [ "data" ],
+        "title" : "PaymentRequest",
+        "description" : "Запрос создания платежа"
+      },
+      "PaymentResponse" : {
+        "properties" : {
+          "data" : {
+            "properties" : {
+              "paymentId" : {
+                "type" : "string",
+                "title" : "Paymentid"
+              },
+              "status" : {
+                "type" : "string",
+                "title" : "Status"
+              },
+              "creationDateTime" : {
+                "type" : "string",
+                "title" : "Creationdatetime"
+              },
+              "statusUpdateDateTime" : {
+                "type" : "string",
+                "title" : "Statusupdatedatetime"
+              }
+            },
+            "type" : "object",
+            "required" : [ "paymentId", "status", "creationDateTime", "statusUpdateDateTime" ],
+            "title" : "PaymentData",
+            "description" : "Данные платежа в ответе"
+          },
+          "links" : {
+            "type" : "object",
+            "title" : "Links"
+          },
+          "meta" : {
+            "anyOf" : [ {
+              "type" : "object"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Meta",
+            "default" : { }
+          }
+        },
+        "type" : "object",
+        "required" : [ "data", "links" ],
+        "title" : "PaymentResponse",
+        "description" : "Ответ с платежом"
+      },
+      "ProductAgreementConsentRequestData" : {
+        "properties" : {
+          "requesting_bank" : {
+            "type" : "string",
+            "title" : "Requesting Bank",
+            "description" : "Код банка-инициатора"
+          },
+          "client_id" : {
+            "type" : "string",
+            "title" : "Client Id",
+            "description" : "ID клиента"
+          },
+          "read_product_agreements" : {
+            "type" : "boolean",
+            "title" : "Read Product Agreements",
+            "description" : "Читать список договоров",
+            "default" : false
+          },
+          "open_product_agreements" : {
+            "type" : "boolean",
+            "title" : "Open Product Agreements",
+            "description" : "Открывать новые договоры",
+            "default" : false
+          },
+          "close_product_agreements" : {
+            "type" : "boolean",
+            "title" : "Close Product Agreements",
+            "description" : "Закрывать договоры",
+            "default" : false
+          },
+          "allowed_product_types" : {
+            "anyOf" : [ {
+              "items" : {
+                "type" : "string"
+              },
+              "type" : "array"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Allowed Product Types",
+            "description" : "Разрешенные типы продуктов: deposit, card, credit"
+          },
+          "max_amount" : {
+            "anyOf" : [ {
+              "type" : "number"
+            }, {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Max Amount",
+            "description" : "Макс сумма открытия продукта"
+          },
+          "valid_until" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "format" : "date-time"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Valid Until",
+            "description" : "Действует до"
+          },
+          "reason" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Reason",
+            "description" : "Причина запроса"
+          }
+        },
+        "type" : "object",
+        "required" : [ "requesting_bank", "client_id" ],
+        "title" : "ProductAgreementConsentRequestData",
+        "description" : "Запрос на создание согласия для управления договорами"
+      },
+      "ProductAgreementRequest" : {
+        "properties" : {
+          "product_id" : {
+            "type" : "string",
+            "title" : "Product Id",
+            "description" : "ID продукта из каталога",
+            "example" : "prod-vbank-deposit-001"
+          },
+          "amount" : {
+            "type" : "number",
+            "title" : "Amount",
+            "description" : "Сумма продукта (депозита, кредита, лимита карты)",
+            "example" : 50000.0
+          },
+          "term_months" : {
+            "anyOf" : [ {
+              "type" : "integer"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Term Months",
+            "description" : "Срок в месяцах (для депозитов и кредитов)",
+            "example" : 12
+          },
+          "source_account_id" : {
+            "anyOf" : [ {
+              "type" : "string"
+            }, {
+              "type" : "null"
+            } ],
+            "title" : "Source Account Id",
+            "description" : "Номер счета для списания средств (обязательно для депозитов и карт, не нужно для кредитов)",
+            "example" : "40817810200010318134"
+          }
+        },
+        "type" : "object",
+        "required" : [ "product_id", "amount" ],
+        "title" : "ProductAgreementRequest",
+        "description" : "Запрос на открытие продукта"
+      },
+      "ValidationError" : {
+        "properties" : {
+          "loc" : {
+            "items" : {
+              "anyOf" : [ {
+                "type" : "string"
+              }, {
+                "type" : "integer"
+              } ]
+            },
+            "type" : "array",
+            "title" : "Location"
+          },
+          "msg" : {
+            "type" : "string",
+            "title" : "Message"
+          },
+          "type" : {
+            "type" : "string",
+            "title" : "Error Type"
+          }
+        },
+        "type" : "object",
+        "required" : [ "loc", "msg", "type" ],
+        "title" : "ValidationError"
+      }
+    },
+    "securitySchemes" : {
+      "HTTPBearer" : {
+        "type" : "http",
+        "scheme" : "bearer"
+      }
+    }
+  },
+  "tags" : [ {
+    "name" : "0 Аутентификация вызывающей системы",
+    "description" : "Получите токен для работы с API"
+  }, {
+    "name" : "1 Согласия на доступ к счетам",
+    "description" : "Создание и управление согласиями для доступа к данным клиентов"
+  }, {
+    "name" : "2 Счета и балансы",
+    "description" : "Просмотр счетов, балансов и истории транзакций"
+  }, {
+    "name" : "3 Согласия на переводы",
+    "description" : "Согласия для совершения платежей от имени клиента"
+  }, {
+    "name" : "4 Переводы",
+    "description" : "Создание платежей и проверка их статуса"
+  }, {
+    "name" : "5 Каталог продуктов",
+    "description" : "Депозиты, кредиты, карты — каталог банковских продуктов"
+  }, {
+    "name" : "6 Согласия на управление договорами",
+    "description" : "Согласия на открытие/закрытие продуктов от имени клиента"
+  }, {
+    "name" : "7 Договоры с продуктами",
+    "description" : "Открытие и закрытие депозитов, кредитов и карт"
+  }, {
+    "name" : "Technical: Well-Known",
+    "description" : "JWKS — публичные ключи для проверки JWT"
+  } ]
+}

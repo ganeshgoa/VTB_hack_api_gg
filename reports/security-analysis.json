@@ -1,0 +1,1611 @@
+{
+  "validatorResults" : {
+    "GET /products" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /products" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /.well-known/jwks.json" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for POST /account-consents/request" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "openapi_structure" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No success responses (200, 201) defined for DELETE /product-agreement-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /account-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No success responses (200, 201) defined for DELETE /account-consents/{consent_id}", "No security defined for DELETE /account-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for POST /auth/bank-token" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /health" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /health" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No success responses (200, 201) defined for DELETE /payment-consents/{consent_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "schemas" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Property 'destination_account_id' in schema 'AccountCloseRequest' missing 'type'", "Property 'repayment_account_id' in schema 'CloseAgreementRequest' missing 'type'", "Property 'repayment_amount' in schema 'CloseAgreementRequest' missing 'type'", "Property 'expirationDateTime' in schema 'ConsentData' missing 'type'", "Property 'meta' in schema 'ConsentResponse' missing 'type'", "Property 'amount' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'creditor_account' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'creditor_name' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'reference' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'max_uses' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'max_amount_per_payment' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'max_total_amount' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'allowed_creditor_accounts' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'vrp_max_individual_amount' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'vrp_daily_limit' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'vrp_monthly_limit' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'valid_from' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'valid_until' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'reason' in schema 'PaymentConsentRequestData' missing 'type'", "Property 'risk' in schema 'PaymentRequest' missing 'type'", "Property 'meta' in schema 'PaymentResponse' missing 'type'", "Property 'allowed_product_types' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'max_amount' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'valid_until' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'reason' in schema 'ProductAgreementConsentRequestData' missing 'type'", "Property 'term_months' in schema 'ProductAgreementRequest' missing 'type'", "Property 'source_account_id' in schema 'ProductAgreementRequest' missing 'type'" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for GET /products/{product_id}" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "No security defined for POST /payment-consents/request" ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "parameters" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    }
+  },
+  "aiResults" : {
+    "ai_analysis_meta-llama/llama-3.3-70b-instruct" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[Недостаточная валидация данных] /auth/bank-token: Отсутствует проверка на SQL-инъекции и валидация входных данных в endpoint /auth/bank-token (Severity: средняя)", "[Недостаточная аутентификация] /accounts: Отсутствует проверка аутентификации для доступа к конфиденциальным данным в endpoint /accounts (Severity: высокая)", "[Недостаточная авторизация] /accounts/{account_id}: Отсутствует проверка прав доступа для доступа к конкретным счетам в endpoint /accounts/{account_id} (Severity: средняя)", "[Утечка чувствительных данных] /account-consents/request: Возможна утечка чувствительных данных при передаче согласия на доступ к счетам в endpoint /account-consents/request (Severity: высокая)", "[Недостаточная валидация данных] /payment-consents/request: Отсутствует проверка на валидность и корректность данных при создании запроса на согласие для платежа в endpoint /payment-consents/request (Severity: средняя)" ],
+      "details" : {
+        "recommendation" : "Добавить проверку на валидность и корректность данных",
+        "model" : "meta-llama/llama-3.3-70b-instruct"
+      },
+      "executionTime" : 0
+    },
+    "ai_analysis_meta-llama/llama-3.1-8b-instruct" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[инъекция] /account-consents/request: В запросе согласия содержится возможность указания произвольного значения для поля \"client_id\", что может привести к инъекции данных. (Severity: высокая)", "[авторизация] /accounts: API требует авторизации для доступа к некоторым ресурсам, но не обеспечивает защиту от несанкционированного доступа. (Severity: средняя)", "[валидация данных] /accounts/{account_id}/transactions: API не обеспечивает валидацию входных данных для параметра \"from_booking_date_time\" и \"to_booking_date_time\", что может привести к ошибкам или атакам. (Severity: низкая)", "[чувствительные данные] /payment-consents/request: API передает чувствительные данные, такие как \"debtor_account\" и \"creditor_account\", в запросе согласия на перевод. (Severity: высокая)" ],
+      "details" : {
+        "recommendation" : "Установить защиту чувствительных данных и обеспечить безопасный обмен данными.",
+        "model" : "meta-llama/llama-3.1-8b-instruct"
+      },
+      "executionTime" : 0
+    },
+    "ai_analysis_qwen/qwen-2.5-coder-32b-instruct" : {
+      "status" : "COMPLETED",
+      "findings" : [ "[аутентификация] POST /auth/bank-token: client_id и client_secret передаются в query-параметрах, что подвергает их риску утечки через логи, кэширование и Referer-заголовки. (Severity: высокая)", "[авторизация] GET /accounts: Отсутствует явная проверка прав доступа для межбанковских запросов с использованием X-Requesting-Bank и X-Consent-Id. (Severity: средняя)", "[инъекции] POST /account-consents/request: Параметры client_id и permissions не имеют ограничений на ввод, что может позволить вставку вредоносных данных. (Severity: средняя)", "[валидация данных] POST /accounts: Параметр initial_balance (number) не имеет ограничений на минимальное/максимальное значение, что может привести к некорректным данным. (Severity: низкая)", "[чувствительные данные] POST /auth/bank-token: client_secret передается в query-параметрах, что не защищено от перехвата. (Severity: высокая)" ],
+      "details" : {
+        "recommendation" : "Реализовать защиту от перехвата чувствительных данных (client_id, client_secret, токены).",
+        "model" : "qwen/qwen-2.5-coder-32b-instruct"
+      },
+      "executionTime" : 0
+    }
+  },
+  "testingResults" : {
+    "GET /products" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /products" : "FAILED",
+        "Unauthorized Access Test - GET /products" : "FAILED",
+        "XSS Injection Test - GET /products" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /" : "FAILED",
+        "XSS Injection Test - GET /" : "FAILED",
+        "Unauthorized Access Test - GET /" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /accounts/{account_id}/balances" : "FAILED",
+        "SQL Injection Test - GET /accounts/{account_id}/balances" : "FAILED",
+        "Unauthorized Access Test - GET /accounts/{account_id}/balances" : "FAILED",
+        "IDOR Test - GET /accounts/{account_id}/balances" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /.well-known/jwks.json" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /.well-known/jwks.json" : "FAILED",
+        "XSS Injection Test - GET /.well-known/jwks.json" : "FAILED",
+        "Unauthorized Access Test - GET /.well-known/jwks.json" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /accounts/{account_id}" : "FAILED",
+        "Unauthorized Access Test - GET /accounts/{account_id}" : "FAILED",
+        "XSS Injection Test - GET /accounts/{account_id}" : "FAILED",
+        "IDOR Test - GET /accounts/{account_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /payments" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - POST /payments" : "FAILED",
+        "Unauthorized Access Test - POST /payments" : "FAILED",
+        "XSS Injection Test - POST /payments" : "FAILED",
+        "Mass Assignment Test - POST /payments" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - POST /account-consents/request" : "FAILED",
+        "Mass Assignment Test - POST /account-consents/request" : "FAILED",
+        "SQL Injection Test - POST /account-consents/request" : "FAILED",
+        "XSS Injection Test - POST /account-consents/request" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED",
+        "Unauthorized Access Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - DELETE /product-agreement-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /product-agreements/{agreement_id}" : "FAILED",
+        "IDOR Test - GET /product-agreements/{agreement_id}" : "FAILED",
+        "Unauthorized Access Test - GET /product-agreements/{agreement_id}" : "FAILED",
+        "SQL Injection Test - GET /product-agreements/{agreement_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - GET /account-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - GET /account-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - GET /account-consents/{consent_id}" : "FAILED",
+        "Unauthorized Access Test - GET /account-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "fuzzing" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /product-agreements" : "FAILED",
+        "XSS Injection Test - GET /product-agreements" : "FAILED",
+        "Unauthorized Access Test - GET /product-agreements" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /payments/{payment_id}" : "FAILED",
+        "IDOR Test - GET /payments/{payment_id}" : "FAILED",
+        "SQL Injection Test - GET /payments/{payment_id}" : "FAILED",
+        "Unauthorized Access Test - GET /payments/{payment_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - POST /accounts" : "FAILED",
+        "Mass Assignment Test - POST /accounts" : "FAILED",
+        "SQL Injection Test - POST /accounts" : "FAILED",
+        "Unauthorized Access Test - POST /accounts" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - DELETE /account-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - DELETE /account-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - DELETE /account-consents/{consent_id}" : "FAILED",
+        "IDOR Test - DELETE /account-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - POST /auth/bank-token" : "FAILED",
+        "Mass Assignment Test - POST /auth/bank-token" : "FAILED",
+        "SQL Injection Test - POST /auth/bank-token" : "FAILED",
+        "XSS Injection Test - POST /auth/bank-token" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /health" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - GET /health" : "FAILED",
+        "Unauthorized Access Test - GET /health" : "FAILED",
+        "SQL Injection Test - GET /health" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - DELETE /product-agreements/{agreement_id}" : "FAILED",
+        "Unauthorized Access Test - DELETE /product-agreements/{agreement_id}" : "FAILED",
+        "IDOR Test - DELETE /product-agreements/{agreement_id}" : "FAILED",
+        "SQL Injection Test - DELETE /product-agreements/{agreement_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "IDOR Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "Unauthorized Access Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "SQL Injection Test - PUT /accounts/{account_id}/status" : "FAILED",
+        "Mass Assignment Test - PUT /accounts/{account_id}/status" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - POST /product-agreement-consents/request" : "FAILED",
+        "SQL Injection Test - POST /product-agreement-consents/request" : "FAILED",
+        "XSS Injection Test - POST /product-agreement-consents/request" : "FAILED",
+        "Mass Assignment Test - POST /product-agreement-consents/request" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreements" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - POST /product-agreements" : "FAILED",
+        "XSS Injection Test - POST /product-agreements" : "FAILED",
+        "Mass Assignment Test - POST /product-agreements" : "FAILED",
+        "Unauthorized Access Test - POST /product-agreements" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - GET /payment-consents/{consent_id}" : "FAILED",
+        "Unauthorized Access Test - GET /payment-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - GET /payment-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - GET /payment-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - GET /accounts" : "FAILED",
+        "XSS Injection Test - GET /accounts" : "FAILED",
+        "Unauthorized Access Test - GET /accounts" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - DELETE /payment-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - DELETE /payment-consents/{consent_id}" : "FAILED",
+        "IDOR Test - DELETE /payment-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - DELETE /payment-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - GET /products/{product_id}" : "FAILED",
+        "SQL Injection Test - GET /products/{product_id}" : "FAILED",
+        "XSS Injection Test - GET /products/{product_id}" : "FAILED",
+        "IDOR Test - GET /products/{product_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "IDOR Test - GET /accounts/{account_id}/transactions" : "FAILED",
+        "Unauthorized Access Test - GET /accounts/{account_id}/transactions" : "FAILED",
+        "SQL Injection Test - GET /accounts/{account_id}/transactions" : "FAILED",
+        "XSS Injection Test - GET /accounts/{account_id}/transactions" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "SQL Injection Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "IDOR Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "Mass Assignment Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "XSS Injection Test - PUT /accounts/{account_id}/close" : "FAILED",
+        "Unauthorized Access Test - PUT /accounts/{account_id}/close" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "MASS_ASSIGNMENT: FAILED (Expected: 400, Actual: 0)" ],
+      "details" : {
+        "XSS Injection Test - POST /payment-consents/request" : "FAILED",
+        "Mass Assignment Test - POST /payment-consents/request" : "FAILED",
+        "Unauthorized Access Test - POST /payment-consents/request" : "FAILED",
+        "SQL Injection Test - POST /payment-consents/request" : "FAILED"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}" : {
+      "status" : "COMPLETED",
+      "findings" : [ "UNAUTHORIZED_ACCESS: FAILED (Expected: 401, Actual: 0)", "SQL_INJECTION: FAILED (Expected: 400, Actual: 0)", "XSS_INJECTION: FAILED (Expected: 400, Actual: 0)", "IDOR: FAILED (Expected: 403, Actual: 0)" ],
+      "details" : {
+        "Unauthorized Access Test - GET /product-agreement-consents/{consent_id}" : "FAILED",
+        "SQL Injection Test - GET /product-agreement-consents/{consent_id}" : "FAILED",
+        "XSS Injection Test - GET /product-agreement-consents/{consent_id}" : "FAILED",
+        "IDOR Test - GET /product-agreement-consents/{consent_id}" : "FAILED"
+      },
+      "executionTime" : 0
+    }
+  },
+  "generatedAt" : "Sun Nov 09 19:52:28 MSK 2025",
+  "endpointAnalysis" : [ {
+    "endpointName" : "POST /auth/bank-token",
+    "endpointNumber" : 1,
+    "input" : "POST /auth/bank-token",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /accounts",
+    "endpointNumber" : 2,
+    "input" : "GET /accounts",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted resource consumption issues suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "POST /accounts",
+    "endpointNumber" : 3,
+    "input" : "POST /accounts",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted business flow access suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /accounts/{account_id}",
+    "endpointNumber" : 4,
+    "input" : "GET /accounts/{account_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted resource consumption issues suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /accounts/{account_id}/balances",
+    "endpointNumber" : 5,
+    "input" : "GET /accounts/{account_id}/balances",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted resource consumption issues suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /accounts/{account_id}/transactions",
+    "endpointNumber" : 6,
+    "input" : "GET /accounts/{account_id}/transactions",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "PUT /accounts/{account_id}/status",
+    "endpointNumber" : 7,
+    "input" : "PUT /accounts/{account_id}/status",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "5 failed tests out of 5",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "PUT /accounts/{account_id}/close",
+    "endpointNumber" : 8,
+    "input" : "PUT /accounts/{account_id}/close",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted business flow access suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "5 failed tests out of 5",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "POST /account-consents/request",
+    "endpointNumber" : 9,
+    "input" : "POST /account-consents/request",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /account-consents/{consent_id}",
+    "endpointNumber" : 10,
+    "input" : "GET /account-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "DELETE /account-consents/{consent_id}",
+    "endpointNumber" : 11,
+    "input" : "DELETE /account-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=2, executionTime=0ms}",
+    "analyzer" : "Unrestricted business flow access suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "POST /payment-consents/request",
+    "endpointNumber" : 12,
+    "input" : "POST /payment-consents/request",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /payment-consents/{consent_id}",
+    "endpointNumber" : 13,
+    "input" : "GET /payment-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "DELETE /payment-consents/{consent_id}",
+    "endpointNumber" : 14,
+    "input" : "DELETE /payment-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "Unrestricted business flow access suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "POST /payments",
+    "endpointNumber" : 15,
+    "input" : "POST /payments",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /payments/{payment_id}",
+    "endpointNumber" : 16,
+    "input" : "GET /payments/{payment_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /products",
+    "endpointNumber" : 17,
+    "input" : "GET /products",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /products/{product_id}",
+    "endpointNumber" : 18,
+    "input" : "GET /products/{product_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /product-agreements",
+    "endpointNumber" : 19,
+    "input" : "GET /product-agreements",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted resource consumption issues suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "POST /product-agreements",
+    "endpointNumber" : 20,
+    "input" : "POST /product-agreements",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /product-agreements/{agreement_id}",
+    "endpointNumber" : 21,
+    "input" : "GET /product-agreements/{agreement_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "Unrestricted resource consumption issues suspected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "DELETE /product-agreements/{agreement_id}",
+    "endpointNumber" : 22,
+    "input" : "DELETE /product-agreements/{agreement_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "POST /product-agreement-consents/request",
+    "endpointNumber" : 23,
+    "input" : "POST /product-agreement-consents/request",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /product-agreement-consents/{consent_id}",
+    "endpointNumber" : 24,
+    "input" : "GET /product-agreement-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=0, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "DELETE /product-agreement-consents/{consent_id}",
+    "endpointNumber" : 25,
+    "input" : "DELETE /product-agreement-consents/{consent_id}",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "4 failed tests out of 4",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /.well-known/jwks.json",
+    "endpointNumber" : 26,
+    "input" : "GET /.well-known/jwks.json",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /",
+    "endpointNumber" : 27,
+    "input" : "GET /",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  }, {
+    "endpointName" : "GET /health",
+    "endpointNumber" : 28,
+    "input" : "GET /health",
+    "validator" : "ModuleResult{status='COMPLETED', findings=1, executionTime=0ms}",
+    "analyzer" : "No issues detected",
+    "ai" : "Found 5 vulnerabilities",
+    "testing" : "3 failed tests out of 3",
+    "reportmaker" : null,
+    "recommendation" : "Review AI security findings",
+    "path" : null,
+    "method" : null
+  } ],
+  "analyzerResults" : {
+    "GET /accounts_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "inventory_issue_65" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ "API documentation is minimal or missing — hinders inventory and security analysis" ],
+      "details" : {
+        "cwe" : "CWE-1059",
+        "owasp_category" : "API9:2023 - Improper Inventory Management",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_ubfa" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive business flow endpoint lacks protection against automated abuse (e.g., scalping, spam, reservation hoarding)" ],
+      "details" : {
+        "owasp_category" : "API6:2023 - Unrestricted Access to Sensitive Business Flows",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /products_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "broken_auth_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "One or more endpoints show signs of broken authentication"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "inventory_issue_64" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ "No deprecation or retirement policy documented — old versions may remain exposed" ],
+      "details" : {
+        "cwe" : "CWE-1059",
+        "owasp_category" : "API9:2023 - Improper Inventory Management",
+        "risk_level" : "LOW"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/close_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: destination_account_id" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "inventory_issue_63" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ "API audience (public/internal/partners) is not documented — may lead to overexposure" ],
+      "details" : {
+        "cwe" : "CWE-1059",
+        "owasp_category" : "API9:2023 - Improper Inventory Management",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "inventory_issue_62" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ "API environment (prod/staging/dev) is not documented — increases risk of exposing test endpoints" ],
+      "details" : {
+        "cwe" : "CWE-1059",
+        "owasp_category" : "API9:2023 - Improper Inventory Management",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive endpoint (/account-consents/request) is not protected by authentication" ],
+      "details" : {
+        "owasp_category" : "API2:2023 - Broken Authentication",
+        "risk_level" : "HIGH",
+        "remediation" : "Apply authentication (e.g., OAuth2 Bearer token) to all sensitive endpoints.",
+        "cwe_name" : "CWE-306: Missing Authentication for Critical Function"
+      },
+      "executionTime" : 0
+    },
+    "POST /accounts_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /payments_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: permissions, client_id" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "bopla_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "One or more endpoints show signs of broken object property level authorization (static analysis)",
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "cwe_references" : "CWE-213, CWE-915"
+      },
+      "executionTime" : 0
+    },
+    "GET /payment-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key",
+        "proof_of_concept" : "curl -X GET 'https://sbank.open.bankingapi.ru/accounts/acc-2636' \\\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZWFtMTU0IiwiY2xpZW50X2lkIjoidGVhbTE1NCIsInR5cGUiOiJ0ZWFtIiwiaXNzIjoic2JhbmsiLCJhdWQiOiJvcGVuYmFua2luZyIsImV4cCI6MTc2Mjc5MzUwOX0.lHCwpKZ-kLoxAkYWi4BkOLShJMr3PQVMZv-wl4cBnzg'"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "POST /accounts_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: initial_balance" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "ubfa_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "One or more endpoints expose sensitive business flows without anti-automation measures"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion", "Request body may contain unbounded arrays/objects — risk of CPU/memory exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-400",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "security_misconfig_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ "Web-facing API lacks CORS policy — may be vulnerable to cross-origin attacks" ],
+      "details" : {
+        "cwe" : "CWE-942",
+        "owasp_category" : "API8:2023 - Security Misconfiguration",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "bfla_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "One or more sensitive endpoints lack authorization checks"
+      },
+      "executionTime" : 0
+    },
+    "misconfig_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "Security misconfigurations detected"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/transactions_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key",
+        "proof_of_concept" : "curl -X GET 'https://sbank.open.bankingapi.ru/accounts/acc-2636/transactions' \\\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZWFtMTU0IiwiY2xpZW50X2lkIjoidGVhbTE1NCIsInR5cGUiOiJ0ZWFtIiwiaXNzIjoic2JhbmsiLCJhdWQiOiJvcGVuYmFua2luZyIsImV4cCI6MTc2Mjc5MzUwOX0.lHCwpKZ-kLoxAkYWi4BkOLShJMr3PQVMZv-wl4cBnzg'"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /payment-consents/{consent_id}_ubfa" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive business flow endpoint lacks protection against automated abuse (e.g., scalping, spam, reservation hoarding)" ],
+      "details" : {
+        "owasp_category" : "API6:2023 - Unrestricted Access to Sensitive Business Flows",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreement-consents/request_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: valid_until, client_id" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive endpoint (/account-consents/{consent_id}) is not protected by authentication" ],
+      "details" : {
+        "owasp_category" : "API2:2023 - Broken Authentication",
+        "risk_level" : "HIGH",
+        "remediation" : "Apply authentication (e.g., OAuth2 Bearer token) to all sensitive endpoints.",
+        "cwe_name" : "CWE-306: Missing Authentication for Critical Function"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts/{account_id}/balances_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key",
+        "proof_of_concept" : "curl -X GET 'https://sbank.open.bankingapi.ru/accounts/acc-2636/balances' \\\n  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZWFtMTU0IiwiY2xpZW50X2lkIjoidGVhbTE1NCIsInR5cGUiOiJ0ZWFtIiwiaXNzIjoic2JhbmsiLCJhdWQiOiJvcGVuYmFua2luZyIsImV4cCI6MTc2Mjc5MzUwOX0.lHCwpKZ-kLoxAkYWi4BkOLShJMr3PQVMZv-wl4cBnzg'"
+      },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive endpoint (/account-consents/{consent_id}) is not protected by authentication" ],
+      "details" : {
+        "owasp_category" : "API2:2023 - Broken Authentication",
+        "risk_level" : "HIGH",
+        "remediation" : "Apply authentication (e.g., OAuth2 Bearer token) to all sensitive endpoints.",
+        "cwe_name" : "CWE-306: Missing Authentication for Critical Function"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_bfla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive/administrative endpoint lacks authorization checks — may be accessible to unauthorized users" ],
+      "details" : {
+        "cwe" : "CWE-285",
+        "owasp_category" : "API5:2023 - Broken Function Level Authorization",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreement-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: valid_until, valid_from, vrp_max_individual_amount, client_id" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Auth endpoint lacks rate limiting, lockout, or captcha — vulnerable to brute force" ],
+      "details" : {
+        "owasp_category" : "API2:2023 - Broken Authentication",
+        "risk_level" : "HIGH",
+        "remediation" : "Implement rate limiting, account lockout, or CAPTCHA after N failed attempts.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_name" : "CWE-307: Improper Restriction of Excessive Authentication Attempts"
+      },
+      "executionTime" : 0
+    },
+    "POST /payment-consents/request_auth" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive endpoint (/payment-consents/request) is not protected by authentication" ],
+      "details" : {
+        "owasp_category" : "API2:2023 - Broken Authentication",
+        "risk_level" : "HIGH",
+        "remediation" : "Apply authentication (e.g., OAuth2 Bearer token) to all sensitive endpoints.",
+        "cwe_name" : "CWE-306: Missing Authentication for Critical Function"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "PUT /accounts/{account_id}/status_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: status" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements/{agreement_id}_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "ssrf_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "No SSRF issues detected"
+      },
+      "executionTime" : 0
+    },
+    "urc_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "One or more endpoints show signs of unrestricted resource consumption"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreement-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "unsafe_consumption_global" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "Third-party integrations appear to be documented with security considerations"
+      },
+      "executionTime" : 0
+    },
+    "bola_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "BOLA vulnerabilities detected or suspected"
+      },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "inventory_global" : {
+      "status" : "ISSUES_FOUND",
+      "findings" : [ ],
+      "details" : {
+        "summary" : "Documentation gaps may lead to improper inventory management"
+      },
+      "executionTime" : 0
+    },
+    "GET /account-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "POST /accounts_ubfa" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive business flow endpoint lacks protection against automated abuse (e.g., scalping, spam, reservation hoarding)" ],
+      "details" : {
+        "owasp_category" : "API6:2023 - Unrestricted Access to Sensitive Business Flows",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_ubfa" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Sensitive business flow endpoint lacks protection against automated abuse (e.g., scalping, spam, reservation hoarding)" ],
+      "details" : {
+        "owasp_category" : "API6:2023 - Unrestricted Access to Sensitive Business Flows",
+        "risk_level" : "MEDIUM"
+      },
+      "executionTime" : 0
+    },
+    "GET /product-agreements_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /account-consents/{consent_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "GET /products/{product_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "GET /accounts_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "POST /account-consents/request_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ ],
+      "details" : { },
+      "executionTime" : 0
+    },
+    "POST /product-agreements_bopla" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential Mass Assignment: endpoint accepts sensitive/internal fields: source_account_id, product_id" ],
+      "details" : {
+        "owasp_category" : "API3:2023 - Broken Object Property Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.",
+        "dynamic_status" : "STATIC_ONLY",
+        "cwe_id" : "CWE-915",
+        "cwe_name" : "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      },
+      "executionTime" : 0
+    },
+    "POST /auth/bank-token_urc" : {
+      "status" : "COMPLETED",
+      "findings" : [ "High-risk endpoint lacks rate limiting — vulnerable to brute force or resource exhaustion" ],
+      "details" : {
+        "cwe" : "CWE-799",
+        "owasp_category" : "API4:2023 - Unrestricted Resource Consumption",
+        "risk_level" : "HIGH"
+      },
+      "executionTime" : 0
+    },
+    "GET /payments/{payment_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    },
+    "DELETE /product-agreements/{agreement_id}_bola" : {
+      "status" : "COMPLETED",
+      "findings" : [ "Potential BOLA: endpoint accesses object by ID — dynamic check required" ],
+      "details" : {
+        "owasp_category" : "API1:2023 - Broken Object Level Authorization",
+        "risk_level" : "HIGH",
+        "remediation" : "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.",
+        "dynamic_status" : "NOT_CONFIRMED",
+        "cwe_id" : "639",
+        "cwe_name" : "Authorization Bypass Through User-Controlled Key"
+      },
+      "executionTime" : 0
+    }
+  },
+  "totalEndpoints" : 28,
+  "recommendations" : {
+    "/payment-consents/request" : [ "Добавить проверку на валидность и корректность данных", "Установить защиту чувствительных данных и обеспечить безопасный обмен данными." ],
+    "/account-consents/request" : [ "Добавить шифрование и защиту чувствительных данных при передаче", "Установить ограничения на значения поля \"client_id\" и обеспечить валидацию входных данных." ],
+    "GET /accounts" : [ "Реализовать строгую проверку соответствия X-Requesting-Bank и X-Consent-Id, а также валидацию сроков действия согласий." ],
+    "/accounts/{account_id}/transactions" : [ "Установить валидацию входных данных для параметров \"from_booking_date_time\" и \"to_booking_date_time\"." ],
+    "/accounts/{account_id}" : [ "Добавить проверку прав доступа для доступа к конкретным счетам" ],
+    "/auth/bank-token" : [ "Добавить проверку на SQL-инъекции и валидацию входных данных" ],
+    "POST /accounts" : [ "Указать constraints для initial_balance (например, минимальное значение 0)." ],
+    "POST /account-consents/request" : [ "Добавить валидацию и фильтрацию входных данных для client_id и permissions." ],
+    "/accounts" : [ "Добавить проверку аутентификации для доступа к конфиденциальным данным", "Установить механизм авторизации и аутентификации, чтобы обеспечить безопасный доступ к ресурсам." ],
+    "POST /auth/bank-token" : [ "Использовать заголовки Authorization или тело запроса для передачи чувствительных данных.", "Использовать HTTPS и передавать client_secret через заголовки или тело запроса." ]
+  },
+  "statistics" : {
+    "riskLevel" : "HIGH",
+    "analyzerFindings" : 53,
+    "validatorFindings" : 40,
+    "aiFindings" : 14
+  }
+}

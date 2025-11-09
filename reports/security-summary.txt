@@ -1,0 +1,81 @@
+API SECURITY ANALYSIS SUMMARY
+=============================
+
+Generated: Sun Nov 09 19:52:28 MSK 2025
+
+EXECUTIVE SUMMARY:
+• Total Endpoints: 28
+• Specification Issues: 40
+• Security Vulnerabilities: 53
+• Risk Level: HIGH
+
+CRITICAL FINDINGS BY CATEGORY:
+
+→ API4:2023 - Unrestricted Resource Consumption:
+  • GET /accounts_urc
+  • POST /payments_urc
+  • POST /product-agreement-consents/request_urc
+  • GET /accounts/{account_id}_urc
+  • DELETE /product-agreements/{agreement_id}_urc
+  • POST /account-consents/request_urc
+  • GET /accounts/{account_id}/balances_urc
+  • POST /product-agreements_urc
+  • GET /product-agreements/{agreement_id}_urc
+  • GET /product-agreements_urc
+  • POST /auth/bank-token_urc
+
+→ API9:2023 - Improper Inventory Management:
+  • inventory_issue_65
+  • inventory_issue_64
+  • inventory_issue_63
+  • inventory_issue_62
+
+→ API6:2023 - Unrestricted Access to Sensitive Business Flows:
+  • PUT /accounts/{account_id}/close_ubfa
+  • DELETE /payment-consents/{consent_id}_ubfa
+  • POST /accounts_ubfa
+  • DELETE /account-consents/{consent_id}_ubfa
+
+→ Broken Object Level Authorization (BOLA):
+  • PUT /accounts/{account_id}/close
+  • POST /payments
+  • GET /payment-consents/{consent_id}
+  • GET /accounts/{account_id}
+  • GET /product-agreements/{agreement_id}
+  • DELETE /payment-consents/{consent_id}
+  • GET /accounts/{account_id}/transactions
+  • GET /product-agreements
+  • GET /accounts/{account_id}/balances
+  • GET /product-agreement-consents/{consent_id}
+  • PUT /accounts/{account_id}/status
+  • DELETE /product-agreement-consents/{consent_id}
+  • POST /product-agreements
+  • GET /account-consents/{consent_id}
+  • DELETE /account-consents/{consent_id}
+  • GET /products/{product_id}
+  • GET /accounts
+  • GET /payments/{payment_id}
+  • DELETE /product-agreements/{agreement_id}
+
+→ API3:2023 - Broken Object Property Level Authorization:
+  • PUT /accounts/{account_id}/close_bopla
+  • POST /account-consents/request_bopla
+  • POST /accounts_bopla
+  • POST /product-agreement-consents/request_bopla
+  • POST /payment-consents/request_bopla
+  • PUT /accounts/{account_id}/status_bopla
+  • POST /product-agreements_bopla
+
+→ Broken Authentication:
+  • POST /account-consents/request
+  • DELETE /account-consents/{consent_id}
+  • GET /account-consents/{consent_id}
+  • POST /auth/bank-token
+  • POST /payment-consents/request
+
+→ API8:2023 - Security Misconfiguration:
+  • security_misconfig_global
+
+→ API5:2023 - Broken Function Level Authorization:
+  • DELETE /account-consents/{consent_id}_bfla
+
