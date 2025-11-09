@@ -15,7 +15,7 @@ public class ImproperInventoryManagementCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Improper Inventory Management (API9:2023)...");
+        System.out.println("Checking Improper Inventory Management (API9:2023)...");
 
         boolean hasIssue = false;
 
@@ -60,7 +60,7 @@ public class ImproperInventoryManagementCheck implements SecurityCheck {
             : "No documentation gaps detected");
         container.addAnalyzerResult("inventory_global", globalResult);
 
-        System.out.println("  ✅ Improper Inventory Management check completed. " +
+        System.out.println("Improper Inventory Management check completed. " +
             (hasIssue ? "Documentation gaps found." : "No issues found."));
     }
 

@@ -15,7 +15,7 @@ public class SecurityMisconfigurationCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Security Misconfiguration (API8:2023)...");
+        System.out.println("Checking Security Misconfiguration (API8:2023)...");
 
         boolean foundIssues = false;
 
@@ -77,7 +77,7 @@ public class SecurityMisconfigurationCheck implements SecurityCheck {
             : "No security misconfigurations detected");
         container.addAnalyzerResult("misconfig_global", globalResult);
 
-        System.out.println("  ✅ Security Misconfiguration check completed. " +
+        System.out.println("Security Misconfiguration check completed. " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

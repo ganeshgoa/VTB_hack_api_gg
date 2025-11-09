@@ -40,11 +40,11 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
 
     @Override
     public void run(JsonNode spec, ContainerApi container, com.apisecurity.analyzer.context.DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Broken Object Property Level Authorization (API3:2023) — static analysis...");
+        System.out.println("Checking Broken Object Property Level Authorization (API3:2023) — static analysis...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println("No paths defined in spec.");
             return;
         }
 
@@ -136,7 +136,7 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
         globalResult.addDetail("cwe_references", "CWE-213, CWE-915");
         container.addAnalyzerResult("bopla_global", globalResult);
 
-        System.out.println("  ✅ Broken Object Property Level Authorization check completed (static only). " +
+        System.out.println("Broken Object Property Level Authorization check completed (static only). " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

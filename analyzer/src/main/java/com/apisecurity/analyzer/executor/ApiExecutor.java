@@ -66,9 +66,9 @@ public class ApiExecutor {
             Files.createDirectories(Paths.get("reports"));
             Files.write(Paths.get(REQUESTS_LOG_FILE), requestLog,
                         StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            System.out.println("📝 Dynamic requests logged to: " + REQUESTS_LOG_FILE);
+            System.out.println("Dynamic requests logged to: " + REQUESTS_LOG_FILE);
         } catch (IOException e) {
-            System.err.println("❌ Failed to write request log: " + e.getMessage());
+            System.err.println("Failed to write request log: " + e.getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ public class ApiExecutor {
         TokenEndpointFinder.TokenEndpoint tokenEp = finder.findTokenEndpoint(spec);
 
         if (tokenEp == null) {
-            System.err.println("❌ No token endpoint found in spec.");
+            System.err.println("No token endpoint found in spec.");
             return false;
         }
 
@@ -91,7 +91,7 @@ public class ApiExecutor {
             if (ctx.has(paramName)) {
                 tokenParams.put(paramName, ctx.get(paramName).toString());
             } else {
-                System.err.println("⚠️ Missing param for token: " + paramName);
+                System.err.println("Missing param for token: " + paramName);
                 return false;
             }
         }
@@ -121,16 +121,16 @@ public class ApiExecutor {
                 JsonNode tokenRes = objectMapper.readTree(response.body());
                 if (tokenRes.has("access_token")) {
                     this.accessToken = tokenRes.get("access_token").asText();
-                    System.out.println("✅ Token obtained successfully.");
+                    System.out.println("Token obtained successfully.");
                     return true;
                 } else {
-                    System.err.println("❌ No 'access_token' in response: " + response.body());
+                    System.err.println("No 'access_token' in response: " + response.body());
                 }
             } else {
-                System.err.println("❌ Token request failed: " + response.statusCode());
+                System.err.println("Token request failed: " + response.statusCode());
             }
         } catch (Exception e) {
-            System.err.println("❌ Error obtaining token: " + e.getMessage());
+            System.err.println("Error obtaining token: " + e.getMessage());
         }
         return false;
     }
@@ -141,7 +141,7 @@ public boolean obtainTokenFromParams(JsonNode spec) {
     TokenEndpointFinder.TokenEndpoint tokenEp = finder.findTokenEndpoint(spec);
 
     if (tokenEp == null) {
-        System.err.println("❌ No token endpoint found in spec.");
+        System.err.println("No token endpoint found in spec.");
         return false;
     }
 
@@ -149,7 +149,7 @@ public boolean obtainTokenFromParams(JsonNode spec) {
     try {
         params = objectMapper.readTree(Files.readAllBytes(Paths.get("params.json")));
     } catch (IOException e) {
-        System.err.println("❌ Failed to read params.json: " + e.getMessage());
+        System.err.println("Failed to read params.json: " + e.getMessage());
         return false;
     }
 
@@ -160,11 +160,11 @@ public boolean obtainTokenFromParams(JsonNode spec) {
             if (values.isArray() && values.size() > 0) {
                 tokenParams.put(paramName, values.get(0).asText());
             } else {
-                System.err.println("⚠️ Parameter '" + paramName + "' in params.json is not a non-empty array");
+                System.err.println("Parameter '" + paramName + "' in params.json is not a non-empty array");
                 return false;
             }
         } else {
-            System.err.println("⚠️ Required token param '" + paramName + "' not found in params.json");
+            System.err.println("Required token param '" + paramName + "' not found in params.json");
             return false;
         }
     }
@@ -178,14 +178,14 @@ public boolean obtainTokenFromParams(JsonNode spec) {
         .collect(Collectors.joining("&"));
 
     HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(tokenUrl))  // ✅ используем tokenUrl
+        .uri(URI.create(tokenUrl)) 
         .header("Content-Type", "application/x-www-form-urlencoded")
         .POST(HttpRequest.BodyPublishers.ofString(formData, StandardCharsets.UTF_8))
         .build();
 
     try {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        logRequestResponse("POST", tokenUrl,  // ✅ здесь тоже tokenUrl
+        logRequestResponse("POST", tokenUrl,  
             Map.of("Content-Type", "application/x-www-form-urlencoded"),
             formData, response.statusCode(), response.body());
 
@@ -193,16 +193,16 @@ public boolean obtainTokenFromParams(JsonNode spec) {
             JsonNode tokenResponse = objectMapper.readTree(response.body());
             if (tokenResponse.has("access_token")) {
                 this.accessToken = tokenResponse.get("access_token").asText();
-                System.out.println("✅ Token from params.json obtained successfully.");
+                System.out.println("Token from params.json obtained successfully.");
                 return true;
             } else {
-                System.err.println("❌ Token response missing 'access_token'");
+                System.err.println("Token response missing 'access_token'");
             }
         } else {
-            System.err.println("❌ Token request failed: " + response.statusCode());
+            System.err.println("Token request failed: " + response.statusCode());
         }
     } catch (Exception e) {
-        System.err.println("❌ Exception during token request from params.json: " + e.getMessage());
+        System.err.println("Exception during token request from params.json: " + e.getMessage());
     }
     return false;
 }

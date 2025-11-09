@@ -40,11 +40,11 @@ public class AnalyzerModule {
 
     public void process(ContainerApi container) {
         long startTime = System.currentTimeMillis();
-        System.out.println("🛡️ Starting OWASP Top 10 security analysis...");
+        System.out.println("Starting OWASP Top 10 security analysis...");
 
         JsonNode spec = container.getFullSpecification();
         if (spec == null) {
-            System.err.println("❌ No specification provided to AnalyzerModule.");
+            System.err.println("No specification provided to AnalyzerModule.");
             return;
         }
 
@@ -53,7 +53,7 @@ public class AnalyzerModule {
         SpecAnalyzer specAnalyzer = new SpecAnalyzer(spec);
         Map<String, EndpointSignature> signatures = specAnalyzer.buildEndpointSignatures(spec);
 
-        System.out.println("🔍 Built " + signatures.size() + " endpoint signatures:");
+        System.out.println("Built " + signatures.size() + " endpoint signatures:");
         for (EndpointSignature sig : signatures.values()) {
             System.out.println("  - " + sig);
         }
@@ -71,43 +71,43 @@ public class AnalyzerModule {
 
         // ✅ Получаем baseUrl из container (уже установлен в ParameterCollector)
         String baseUrl = container.getAnalyzerBaseUrl();
-        System.out.println("🌐 Using base URL: " + baseUrl);
+        System.out.println("Using base URL: " + baseUrl);
 
         // ✅ УБРАНО дублирование: только одно объявление executor
         ApiExecutor executor = new ApiExecutor(baseUrl);
 
         if (executor.obtainToken(spec, ctx)) {
-            System.out.println("🔑 Token ready for dynamic analysis.");
+            System.out.println("Token ready for dynamic analysis.");
         } else {
-            System.out.println("⚠️ Token acquisition failed — dynamic checks may be limited.");
+            System.out.println("Token acquisition failed — dynamic checks may be limited.");
         }
 
-        System.out.println("🔧 ExecutionContext initialized with: " + ctx.getKeys());
+        System.out.println("ExecutionContext initialized with: " + ctx.getKeys());
 
         DynamicContext dynamicContext = null;
         if (executor.getAccessToken() != null) {
             dynamicContext = new DynamicContext(executor, ctx);
-            System.out.println("⚡ Dynamic analysis enabled.");
+            System.out.println("Dynamic analysis enabled.");
         } else {
-            System.out.println("⚠️ Dynamic analysis disabled: token not available.");
+            System.out.println("Dynamic analysis disabled: token not available.");
         }
 
         if (spec.has("paths")) {
             for (SecurityCheck check : checks) {
-                System.out.println("➡️ Running " + check.getName() + " check...");
+                System.out.println("Running " + check.getName() + " check...");
                 try {
                     check.run(spec, container, dynamicContext);
                 } catch (Exception e) {
-                    System.err.println("❌ Error running " + check.getName() + ": " + e.getMessage());
+                    System.err.println("Error running " + check.getName() + ": " + e.getMessage());
                     e.printStackTrace();
                 }
             }
         } else {
-            System.out.println("⚠️ Spec has no 'paths' — skipping security checks.");
+            System.out.println("Spec has no 'paths' — skipping security checks.");
         }
 
         long endTime = System.currentTimeMillis();
-        System.out.println("✅ Security analysis completed in " + (endTime - startTime) + "ms");
+        System.out.println("Security analysis completed in " + (endTime - startTime) + "ms");
         
         if (executor != null) {
             executor.saveRequestLog();
@@ -118,9 +118,9 @@ public class AnalyzerModule {
         try {
             File outputFile = new File("spec.json");
             objectMapper.writeValue(outputFile, spec);
-            System.out.println("📄 OpenAPI specification saved to: " + outputFile.getAbsolutePath());
+            System.out.println("OpenAPI specification saved to: " + outputFile.getAbsolutePath());
         } catch (IOException e) {
-            System.err.println("⚠️ Failed to save spec.json: " + e.getMessage());
+            System.err.println("Failed to save spec.json: " + e.getMessage());
         }
     }
 }

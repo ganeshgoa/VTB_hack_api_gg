@@ -27,11 +27,11 @@ public class BrokenFunctionLevelAuthorizationCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Broken Function Level Authorization (API5:2023)...");
+        System.out.println("Checking Broken Function Level Authorization (API5:2023)...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println(" paths defined in spec.");
             return;
         }
 
@@ -96,7 +96,7 @@ public class BrokenFunctionLevelAuthorizationCheck implements SecurityCheck {
             : "No broken function level authorization issues detected");
         container.addAnalyzerResult("bfla_global", globalResult);
 
-        System.out.println("  ✅ Broken Function Level Authorization check completed. " +
+        System.out.println("Broken Function Level Authorization check completed. " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

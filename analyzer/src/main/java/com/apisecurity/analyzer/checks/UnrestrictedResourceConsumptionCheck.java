@@ -26,11 +26,11 @@ public class UnrestrictedResourceConsumptionCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Unrestricted Resource Consumption (API4:2023)...");
+        System.out.println("Checking Unrestricted Resource Consumption (API4:2023)...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println("No paths defined in spec.");
             return;
         }
 
@@ -131,7 +131,7 @@ public class UnrestrictedResourceConsumptionCheck implements SecurityCheck {
             : "No unrestricted resource consumption issues detected");
         container.addAnalyzerResult("urc_global", globalResult);
 
-        System.out.println("  ✅ Unrestricted Resource Consumption check completed. " +
+        System.out.println("Unrestricted Resource Consumption check completed. " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

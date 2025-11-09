@@ -4,7 +4,7 @@ package com.apisecurity.analyzer.context;
 
 import com.apisecurity.analyzer.discovery.EndpointSignature;
 import com.apisecurity.shared.Configuration;
-import com.apisecurity.shared.ContainerApi; // ✅ ДОБАВЛЕНО
+import com.apisecurity.shared.ContainerApi; 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,10 +18,9 @@ public class ParameterCollector {
 
     private static final String DEFAULT_PARAMS_FILE = "params.json";
     private final Configuration config;
-    private final ContainerApi container; // ✅ вместо signatures напрямую
+    private final ContainerApi container; 
     private final Map<String, EndpointSignature> signatures;
 
-    // ✅ КОНСТРУКТОР ИЗМЕНЁН
     public ParameterCollector(Configuration config, ContainerApi container, Map<String, EndpointSignature> signatures) {
         this.config = config;
         this.container = container;
@@ -42,20 +41,20 @@ public class ParameterCollector {
                 if (root.has("base_url")) {
                     String baseUrl = root.get("base_url").asText().trim().replaceAll("/+$", "");
                     container.setAnalyzerBaseUrl(baseUrl);
-                    System.out.println("✅ Loaded base_url from " + DEFAULT_PARAMS_FILE + ": " + baseUrl);
+                    System.out.println("Loaded base_url from " + DEFAULT_PARAMS_FILE + ": " + baseUrl);
                 } else {
-                    System.out.println("⚠️ base_url not found in " + DEFAULT_PARAMS_FILE);
+                    System.out.println("base_url not found in " + DEFAULT_PARAMS_FILE);
                 }
             } catch (Exception e) {
-                System.err.println("❌ Failed to parse " + DEFAULT_PARAMS_FILE + ": " + e.getMessage());
+                System.err.println("Failed to parse " + DEFAULT_PARAMS_FILE + ": " + e.getMessage());
             }
         } else {
-            System.out.println("ℹ️ " + DEFAULT_PARAMS_FILE + " not found.");
+            System.out.println(DEFAULT_PARAMS_FILE + " not found.");
         }
 
         // === Сбор параметров (без изменений) ===
         Set<String> allRequiredParams = collectAllRequiredParameters();
-        System.out.println("🔍 Required dynamic parameters: " + allRequiredParams);
+        System.out.println("Required dynamic parameters: " + allRequiredParams);
 
         Map<String, String> jsonParams = new HashMap<>();
         if (root != null) {
@@ -70,7 +69,7 @@ public class ParameterCollector {
                     }
                     if (value != null && !value.trim().isEmpty()) {
                         jsonParams.put(param, value);
-                        System.out.println("✅ Loaded from " + DEFAULT_PARAMS_FILE + ": " + param + " = " + maskSecret(param, value));
+                        System.out.println("Loaded from " + DEFAULT_PARAMS_FILE + ": " + param + " = " + maskSecret(param, value));
                     }
                 }
             }
@@ -82,12 +81,12 @@ public class ParameterCollector {
             } else {
                 if ("client_id".equals(param) && config.getAnalyzerClientId() != null) {
                     ctx.provide(param, config.getAnalyzerClientId());
-                    System.out.println("✅ Using config: client_id = " + config.getAnalyzerClientId());
+                    System.out.println("Using config: client_id = " + config.getAnalyzerClientId());
                 } else if ("client_secret".equals(param) && config.getAnalyzerClientSecret() != null) {
                     ctx.provide(param, config.getAnalyzerClientSecret());
-                    System.out.println("✅ Using config: client_secret = *** (hidden)");
+                    System.out.println("Using config: client_secret = *** (hidden)");
                 } else {
-                    System.out.println("⚠️ Missing value for parameter: " + param);
+                    System.out.println("Missing value for parameter: " + param);
                 }
             }
         }

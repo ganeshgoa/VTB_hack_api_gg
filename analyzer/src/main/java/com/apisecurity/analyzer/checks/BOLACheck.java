@@ -21,11 +21,11 @@ public class BOLACheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Broken Object Level Authorization (BOLA)...");
+        System.out.println("Checking Broken Object Level Authorization (BOLA)...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println("No paths defined in spec.");
             return;
         }
 
@@ -102,7 +102,7 @@ public class BOLACheck implements SecurityCheck {
             : "No BOLA issues found");
         container.addAnalyzerResult("bola_global", globalResult);
 
-        System.out.println("  ✅ BOLA check completed.");
+        System.out.println("BOLA check completed.");
     }
 
     private String performDynamicBOLATest(String method, String path, String baseUrl, DynamicContext ctx) {
@@ -110,7 +110,7 @@ public class BOLACheck implements SecurityCheck {
         if (paramName == null) return null;
 
         if (!ctx.getExecutionContext().has(paramName)) {
-            System.out.println("  ⚠️ No " + paramName + " in params.json — skipping dynamic test for " + path);
+            System.out.println("No " + paramName + " in params.json — skipping dynamic test for " + path);
             return null;
         }
 
@@ -135,7 +135,7 @@ public class BOLACheck implements SecurityCheck {
 
             // ⚠️ Если 429 — прерываем тест для этого эндпоинта (сервер нас блокирует)
             if (res.statusCode == 429) {
-                System.out.println("  ⚠️ 429 Too Many Requests — stopping BOLA test for this endpoint to avoid ban");
+                System.out.println("429 Too Many Requests — stopping BOLA test for this endpoint to avoid ban");
                 break;
             }
 

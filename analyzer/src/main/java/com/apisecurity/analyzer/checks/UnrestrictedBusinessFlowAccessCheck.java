@@ -45,11 +45,11 @@ public class UnrestrictedBusinessFlowAccessCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Unrestricted Access to Sensitive Business Flows (API6:2023)...");
+        System.out.println("Checking Unrestricted Access to Sensitive Business Flows (API6:2023)...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println("No paths defined in spec.");
             return;
         }
 
@@ -112,7 +112,7 @@ public class UnrestrictedBusinessFlowAccessCheck implements SecurityCheck {
             : "No unrestricted business flow access issues detected");
         container.addAnalyzerResult("ubfa_global", globalResult);
 
-        System.out.println("  ✅ Unrestricted Business Flow Access check completed. " +
+        System.out.println("Unrestricted Business Flow Access check completed. " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

@@ -39,11 +39,11 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Broken Authentication (API2:2023)...");
+        System.out.println("Checking Broken Authentication (API2:2023)...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println("No paths defined in spec.");
             return;
         }
 
@@ -189,7 +189,7 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
             : "No broken authentication issues detected");
         container.addAnalyzerResult("broken_auth_global", globalResult);
 
-        System.out.println("  ✅ Broken Authentication check completed. " +
+        System.out.println("Broken Authentication check completed. " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

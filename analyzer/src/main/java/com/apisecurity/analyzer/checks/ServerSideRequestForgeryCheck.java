@@ -35,11 +35,11 @@ public class ServerSideRequestForgeryCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Server-Side Request Forgery (API7:2023)...");
+        System.out.println("Checking Server-Side Request Forgery (API7:2023)...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
-            System.out.println("  ⚠️ No paths defined in spec.");
+            System.out.println("No paths defined in spec.");
             return;
         }
 
@@ -91,7 +91,7 @@ public class ServerSideRequestForgeryCheck implements SecurityCheck {
             : "No SSRF issues detected");
         container.addAnalyzerResult("ssrf_global", globalResult);
 
-        System.out.println("  ✅ Server-Side Request Forgery check completed. " +
+        System.out.println("Server-Side Request Forgery check completed. " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 

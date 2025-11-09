@@ -29,7 +29,7 @@ public class UnsafeConsumptionOfApisCheck implements SecurityCheck {
 
     @Override
     public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Unsafe Consumption of APIs (API10:2023)...");
+        System.out.println("Checking Unsafe Consumption of APIs (API10:2023)...");
 
         String fullSpecText = spec.toString().toLowerCase();
 
@@ -39,7 +39,7 @@ public class UnsafeConsumptionOfApisCheck implements SecurityCheck {
 
         if (!hasIntegrationMention) {
             // Нет признаков интеграций — пропускаем
-            System.out.println("  ⚪ No third-party integrations mentioned — skipping detailed check.");
+            System.out.println("No third-party integrations mentioned — skipping detailed check.");
             ModuleResult globalResult = new ModuleResult("COMPLETED");
             globalResult.addDetail("summary", "No evidence of third-party API consumption");
             container.addAnalyzerResult("unsafe_consumption_global", globalResult);
@@ -79,7 +79,7 @@ public class UnsafeConsumptionOfApisCheck implements SecurityCheck {
             : "Third-party integrations appear to be documented with security considerations");
         container.addAnalyzerResult("unsafe_consumption_global", globalResult);
 
-        System.out.println("  ✅ Unsafe Consumption of APIs check completed. " +
+        System.out.println("Unsafe Consumption of APIs check completed. " +
             (foundIssue ? "Risks identified." : "No issues found."));
     }
 
