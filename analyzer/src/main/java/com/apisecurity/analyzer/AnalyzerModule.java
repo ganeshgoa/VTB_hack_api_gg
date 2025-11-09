@@ -1,3 +1,5 @@
+// com.apisecurity.analyzer/AnalyzerModule.java
+
 package com.apisecurity.analyzer;
 
 import com.apisecurity.analyzer.checks.*;
@@ -10,13 +12,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import com.apisecurity.shared.ContainerApi;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-// и другие при необходимости
 
 public class AnalyzerModule {
 
@@ -27,16 +25,16 @@ public class AnalyzerModule {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         this.checks = Arrays.asList(
-            new BOLACheck()
-            //new BrokenAuthenticationCheck(),
-            //new BrokenObjectPropertyLevelAuthorizationCheck(),
-            //new UnrestrictedResourceConsumptionCheck(),
-            //new BrokenFunctionLevelAuthorizationCheck(),
-            //new UnrestrictedBusinessFlowAccessCheck(),
-            //new ServerSideRequestForgeryCheck(),
-            //new SecurityMisconfigurationCheck(),
-            //new ImproperInventoryManagementCheck(),
-            //new UnsafeConsumptionOfApisCheck()
+            new BOLACheck(),
+            new BrokenAuthenticationCheck(),
+            new BrokenObjectPropertyLevelAuthorizationCheck(),
+            new UnrestrictedResourceConsumptionCheck(),
+            new BrokenFunctionLevelAuthorizationCheck(),
+            new UnrestrictedBusinessFlowAccessCheck(),
+            new ServerSideRequestForgeryCheck(),
+            new SecurityMisconfigurationCheck(),
+            new ImproperInventoryManagementCheck(),
+            new UnsafeConsumptionOfApisCheck()
         );
     }
 
@@ -50,34 +48,34 @@ public class AnalyzerModule {
             return;
         }
 
-        // 🔽 Сохраняем исходную спецификацию в spec.json
         saveSpecificationToFile(spec);
 
-        // 🔽 Шаг 1: построить сигнатуры
         SpecAnalyzer specAnalyzer = new SpecAnalyzer(spec);
         Map<String, EndpointSignature> signatures = specAnalyzer.buildEndpointSignatures(spec);
 
-        // Для отладки:
         System.out.println("🔍 Built " + signatures.size() + " endpoint signatures:");
         for (EndpointSignature sig : signatures.values()) {
             System.out.println("  - " + sig);
         }
-        
-        // 🔽 ШАГ 2: Построение графа вызовов
+
         DependencyGraph graph = new DependencyGraph(signatures);
-        graph.printGraph(); // для отладки
-        // === ШАГ 2: Сбор параметров от пользователя ===
-        ParameterCollector collector = new ParameterCollector(container.getConfiguration(), signatures);
+        graph.printGraph();
+
+        // ✅ ПЕРЕДАЁМ container в ParameterCollector
+        ParameterCollector collector = new ParameterCollector(
+            container.getConfiguration(), 
+            container, // ← вот он!
+            signatures
+        );
         ExecutionContext ctx = collector.collect();
 
-        // Получаем baseUrl
-        String baseUrl = container.getAnalyzerBaseUrl().trim().replaceAll("/+$", "");
-        System.out.println("URL: " + baseUrl);
+        // ✅ Получаем baseUrl из container (уже установлен в ParameterCollector)
+        String baseUrl = container.getAnalyzerBaseUrl();
+        System.out.println("🌐 Using base URL: " + baseUrl);
 
-        // Создаём executor
+        // ✅ УБРАНО дублирование: только одно объявление executor
         ApiExecutor executor = new ApiExecutor(baseUrl);
 
-        // Получаем токен
         if (executor.obtainToken(spec, ctx)) {
             System.out.println("🔑 Token ready for dynamic analysis.");
         } else {
@@ -110,13 +108,12 @@ public class AnalyzerModule {
 
         long endTime = System.currentTimeMillis();
         System.out.println("✅ Security analysis completed in " + (endTime - startTime) + "ms");
-        // После всех проверок:
+        
         if (executor != null) {
             executor.saveRequestLog();
         }
     }
 
-    // 🔽 Новый метод: сохранение спецификации в файл
     private void saveSpecificationToFile(JsonNode spec) {
         try {
             File outputFile = new File("spec.json");

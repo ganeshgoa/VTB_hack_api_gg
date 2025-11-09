@@ -5,10 +5,10 @@ import com.apisecurity.shared.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
-import com.apisecurity.analyzer.context.DynamicContext;
+
 public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityCheck {
 
-    // Поля, которые обычно НЕ должны возвращаться обычным пользователям
+    // Поля, которые обычно НЕ должны возвращаться обычным пользователям (Excessive Data Exposure)
     private static final Set<String> SENSITIVE_RESPONSE_FIELDS = Set.of(
         "password", "pass", "secret", "token", "api_key", "apikey", "jwt",
         "email", "phone", "ssn", "tax_id", "dob", "date_of_birth",
@@ -39,8 +39,8 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
     }
 
     @Override
-    public void run(JsonNode spec, ContainerApi container, DynamicContext dynamicContext) {
-        System.out.println("  🔍 Checking Broken Object Property Level Authorization (API3:2023)...");
+    public void run(JsonNode spec, ContainerApi container, com.apisecurity.analyzer.context.DynamicContext dynamicContext) {
+        System.out.println("  🔍 Checking Broken Object Property Level Authorization (API3:2023) — static analysis...");
 
         JsonNode paths = spec.get("paths");
         if (paths == null || !paths.isObject()) {
@@ -71,7 +71,7 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
                 ModuleResult result = new ModuleResult("COMPLETED");
                 boolean vulnerable = false;
 
-                // === 1. Excessive Data Exposure (чувствительные поля в ответе) ===
+                // === 1. Excessive Data Exposure (CWE-213) ===
                 Set<String> responseFields = extractResponseFields(operation);
                 Set<String> sensitiveResponseFields = new HashSet<>();
                 for (String field : responseFields) {
@@ -81,52 +81,62 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
                 }
 
                 if (!sensitiveResponseFields.isEmpty()) {
-                    result.addFinding("Excessive Data Exposure: endpoint returns sensitive fields: " + String.join(", ", sensitiveResponseFields));
+                    String finding = "Excessive Data Exposure: endpoint returns sensitive fields: " + String.join(", ", sensitiveResponseFields);
+                    result.addFinding(finding);
                     result.addDetail("risk_level", "MEDIUM");
+                    result.addDetail("cwe_id", "CWE-213");
+                    result.addDetail("cwe_name", "Exposure of Sensitive Information Due to Incompatible Policies");
+                    result.addDetail("owasp_category", "API3:2023 - Broken Object Property Level Authorization");
+                    result.addDetail("remediation", "Avoid generic serialization (e.g., to_json()). Return only necessary fields. Validate that the user is authorized to access each returned property.");
                     vulnerable = true;
                 }
 
-                // === 2. Mass Assignment (чувствительные поля в теле запроса) ===
-                Set<String> requestFields = extractRequestBodyFields(operation);
-                Set<String> sensitiveRequestFields = new HashSet<>();
-                for (String field : requestFields) {
-                    if (isSensitiveRequestField(field)) {
-                        sensitiveRequestFields.add(field);
+                // === 2. Mass Assignment (CWE-915) ===
+                if (!"get".equals(method) && !"delete".equals(method)) {
+                    Set<String> requestFields = extractRequestBodyFields(operation);
+                    Set<String> sensitiveRequestFields = new HashSet<>();
+                    for (String field : requestFields) {
+                        if (isSensitiveRequestField(field)) {
+                            sensitiveRequestFields.add(field);
+                        }
                     }
-                }
 
-                if (!sensitiveRequestFields.isEmpty()) {
-                    // Только для методов, которые МОГУТ менять данные
-                    if (!"get".equals(method) && !"delete".equals(method)) {
-                        result.addFinding("Potential Mass Assignment: endpoint accepts sensitive/internal fields: " + String.join(", ", sensitiveRequestFields));
+                    if (!sensitiveRequestFields.isEmpty()) {
+                        String finding = "Potential Mass Assignment: endpoint accepts sensitive/internal fields: " + String.join(", ", sensitiveRequestFields);
+                        result.addFinding(finding);
                         result.addDetail("risk_level", "HIGH");
+                        result.addDetail("cwe_id", "CWE-915");
+                        result.addDetail("cwe_name", "Improperly Controlled Modification of Dynamically-Determined Object Attributes");
+                        result.addDetail("owasp_category", "API3:2023 - Broken Object Property Level Authorization");
+                        result.addDetail("remediation", "Do not auto-bind client input to internal object properties. Use allowlists of permitted fields. Validate that the user is authorized to modify each property.");
                         vulnerable = true;
                     }
                 }
 
                 if (vulnerable) {
-                    result.addDetail("owasp_category", "API3:2023 - Broken Object Property Level Authorization");
+                    result.addDetail("dynamic_status", "STATIC_ONLY");
                     container.addAnalyzerResult(endpointName + "_bopla", result);
                     foundIssues = true;
                 }
 
                 if (analysis != null) {
-                    analysis.setAnalyzer(
-                        vulnerable
-                            ? "Broken object property level authorization issues suspected"
-                            : "No issues detected"
-                    );
+                    String status = vulnerable
+                        ? "BOPA issues suspected (static analysis)"
+                        : "No BOPA issues detected";
+                    analysis.setAnalyzer(status);
                 }
             }
         }
 
         ModuleResult globalResult = new ModuleResult(foundIssues ? "ISSUES_FOUND" : "COMPLETED");
         globalResult.addDetail("summary", foundIssues
-            ? "One or more endpoints show signs of broken object property level authorization"
-            : "No broken object property level authorization issues detected");
+            ? "One or more endpoints show signs of broken object property level authorization (static analysis)"
+            : "No broken object property level authorization issues detected (static analysis)");
+        globalResult.addDetail("owasp_category", "API3:2023 - Broken Object Property Level Authorization");
+        globalResult.addDetail("cwe_references", "CWE-213, CWE-915");
         container.addAnalyzerResult("bopla_global", globalResult);
 
-        System.out.println("  ✅ Broken Object Property Level Authorization check completed. " +
+        System.out.println("  ✅ Broken Object Property Level Authorization check completed (static only). " +
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 
@@ -148,7 +158,6 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
         Set<String> fields = new HashSet<>();
         JsonNode responses = operation.get("responses");
         if (responses != null) {
-            // Проверяем успешные ответы: 200, 201, etc.
             Iterator<String> statusCodes = responses.fieldNames();
             while (statusCodes.hasNext()) {
                 String code = statusCodes.next();
@@ -200,24 +209,25 @@ public class BrokenObjectPropertyLevelAuthorizationCheck implements SecurityChec
             Iterator<String> names = props.fieldNames();
             names.forEachRemaining(fields::add);
         }
-        // Простая рекурсия для вложенных объектов (ограничена)
-        if (schema.has("type") && "object".equals(schema.get("type").asText())) {
-            if (schema.has("additionalProperties")) {
-                // Если additionalProperties: true — потенциальный Mass Assignment
-                // Но пока пропустим
+        // Поддержка allOf, anyOf, oneOf
+        for (String combiner : Arrays.asList("allOf", "anyOf", "oneOf")) {
+            if (schema.has(combiner)) {
+                for (JsonNode sub : schema.get(combiner)) {
+                    extractFieldsFromSchema(sub, fields);
+                }
             }
         }
     }
 
     private boolean isSensitiveResponseField(String fieldName) {
         String lower = fieldName.toLowerCase();
-        return SENSITIVE_RESPONSE_FIELDS.stream().anyMatch(lower::contains) ||
-               SENSITIVE_RESPONSE_FIELDS.contains(lower);
+        return SENSITIVE_RESPONSE_FIELDS.contains(lower) ||
+               SENSITIVE_RESPONSE_FIELDS.stream().anyMatch(lower::contains);
     }
 
     private boolean isSensitiveRequestField(String fieldName) {
         String lower = fieldName.toLowerCase();
-        return SENSITIVE_REQUEST_FIELDS.stream().anyMatch(lower::contains) ||
-               SENSITIVE_REQUEST_FIELDS.contains(lower);
+        return SENSITIVE_REQUEST_FIELDS.contains(lower) ||
+               SENSITIVE_REQUEST_FIELDS.stream().anyMatch(lower::contains);
     }
 }

@@ -1,4 +1,5 @@
 {
+  "base_url": "https://sbank.open.bankingapi.ru",
   "client_id": ["team154", "team154-5"],
   "client_secret": ["rihm8KZlNFqhH4DQ3H0LpK8hwub1Unpa"],
   "account_id": ["acc-2635", "acc-4548"],

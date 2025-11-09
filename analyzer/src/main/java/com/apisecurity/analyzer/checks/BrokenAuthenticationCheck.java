@@ -2,11 +2,16 @@
 package com.apisecurity.analyzer.checks;
 
 import com.apisecurity.shared.*;
+import com.apisecurity.analyzer.context.DynamicContext;
+import com.apisecurity.analyzer.context.ExecutionContext;
+import com.apisecurity.analyzer.executor.ApiCallResult;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import com.apisecurity.analyzer.context.DynamicContext;
+import java.util.stream.Collectors;
+
 public class BrokenAuthenticationCheck implements SecurityCheck {
 
     private static final Set<String> AUTH_PATH_KEYWORDS = Set.of(
@@ -24,6 +29,9 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
         Pattern.CASE_INSENSITIVE
     );
 
+    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper =
+        new com.fasterxml.jackson.databind.ObjectMapper();
+
     @Override
     public String getName() {
         return "BrokenAuthentication";
@@ -40,7 +48,7 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
         }
 
         boolean foundIssues = false;
-        boolean hasAuthEndpoints = false;
+        String baseUrl = getBaseUrl(spec, container.getConfiguration());
 
         Iterator<Map.Entry<String, JsonNode>> pathIt = paths.fields();
         while (pathIt.hasNext()) {
@@ -64,56 +72,99 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
 
                 boolean vulnerable = false;
 
-                // === 1. Эндпоинт аутентификации? ===
-                boolean isAuthEndpoint = isAuthenticationEndpoint(path);
-                if (isAuthEndpoint) {
-                    hasAuthEndpoints = true;
-
-                    // GET с credentials в URL
+                // === 1. Authentication endpoint checks ===
+                if (isAuthenticationEndpoint(path)) {
+                    // 1a. Credentials in URL (GET)
                     if ("get".equals(method) && hasCredentialsInUrl(operation)) {
-                        result.addFinding("Authentication via GET request — credentials exposed in URL/logs");
-                        result.addDetail("risk_level", "HIGH");
+                        addFinding(result,
+                            "Authentication via GET request — credentials exposed in URL/logs",
+                            "HIGH",
+                            "CWE-598: Use of GET Request Method With Sensitive Data",
+                            "Send credentials in request body over HTTPS, never in URL.");
                         vulnerable = true;
                     }
 
-                    // Нет упоминаний защиты от брутфорса
+                    // 1b. Missing brute-force protection
                     if (!hasRateLimitingOrLockout(operation)) {
-                        result.addFinding("Auth endpoint lacks rate limiting, lockout, or captcha — vulnerable to brute force");
-                        result.addDetail("risk_level", "HIGH");
+                        addFinding(result,
+                            "Auth endpoint lacks rate limiting, lockout, or captcha — vulnerable to brute force",
+                            "HIGH",
+                            "CWE-307: Improper Restriction of Excessive Authentication Attempts",
+                            "Implement rate limiting, account lockout, or CAPTCHA after N failed attempts.");
                         vulnerable = true;
+
+                        // Dynamic brute-force test
+                        if (dynamicContext != null && dynamicContext.isAvailable()) {
+                            String poc = performBruteForceTest(method, path, baseUrl, dynamicContext);
+                            if (poc != null) {
+                                result.addDetail("dynamic_status", "CONFIRMED");
+                                result.addDetail("proof_of_concept", poc);
+                                System.out.println("  💥 Brute-force vulnerability CONFIRMED on " + endpointName);
+                            } else {
+                                result.addDetail("dynamic_status", "NOT_CONFIRMED");
+                            }
+                        } else {
+                            result.addDetail("dynamic_status", "NOT_TESTED");
+                        }
+                    } else {
+                        result.addDetail("dynamic_status", "PROTECTED");
                     }
 
-                    // JWT: проверка по описанию (если есть)
-                    if (mentionsJWT(operation)) {
-                        if (!hasJwtExpirationCheck(operation)) {
-                            result.addFinding("JWT tokens accepted without expiration validation");
-                            result.addDetail("risk_level", "HIGH");
-                            vulnerable = true;
-                        }
+                    // 1c. JWT without expiration check
+                    if (mentionsJWT(operation) && !hasJwtExpirationCheck(operation)) {
+                        addFinding(result,
+                            "JWT tokens accepted without expiration validation",
+                            "HIGH",
+                            "CWE-613: Insufficient Session Expiration",
+                            "Validate 'exp' claim in all JWT tokens and reject expired ones.");
+                        vulnerable = true;
                     }
                 }
 
-                // === 2. Чувствительный эндпоинт БЕЗ аутентификации ===
+                // === 2. Sensitive endpoint without authentication ===
                 boolean isSensitivePath = isSensitivePath(path);
                 boolean hasSecurity = hasSecurityRequirement(operation, spec);
 
                 if (isSensitivePath && !hasSecurity) {
-                    result.addFinding("Sensitive endpoint (" + path + ") is not protected by authentication");
-                    result.addDetail("risk_level", "HIGH");
+                    addFinding(result,
+                        "Sensitive endpoint (" + path + ") is not protected by authentication",
+                        "HIGH",
+                        "CWE-306: Missing Authentication for Critical Function",
+                        "Apply authentication (e.g., OAuth2 Bearer token) to all sensitive endpoints.");
                     vulnerable = true;
                 }
 
-                // === 3. Чувствительная операция без подтверждения пароля ===
+                // === 3. Sensitive operation without password confirmation ===
                 if (isSensitiveOperation(path) && !requiresPasswordConfirmation(operation)) {
-                    result.addFinding("Sensitive operation does not require current password confirmation");
-                    result.addDetail("risk_level", "HIGH");
+                    addFinding(result,
+                        "Sensitive operation does not require current password confirmation",
+                        "HIGH",
+                        "CWE-640: Weak Password Recovery Mechanism for Forgotten Password",
+                        "Require current password or OTP before allowing sensitive changes (email, password, 2FA).");
                     vulnerable = true;
+
+                    // Dynamic test: try to change email without password
+                    if (dynamicContext != null && dynamicContext.isAvailable()) {
+                        String poc = performPasswordConfirmationBypassTest(method, path, baseUrl, dynamicContext);
+                        if (poc != null) {
+                            result.addDetail("dynamic_status", "CONFIRMED");
+                            result.addDetail("proof_of_concept", poc);
+                            System.out.println("  💥 Password confirmation bypass CONFIRMED on " + endpointName);
+                        } else {
+                            result.addDetail("dynamic_status", "NOT_CONFIRMED");
+                        }
+                    } else {
+                        result.addDetail("dynamic_status", "NOT_TESTED");
+                    }
                 }
 
-                // === 4. API-ключ для пользовательской аутентификации ===
+                // === 4. API key used for user authentication ===
                 if (usesApiKeyForUserAuth(operation, spec)) {
-                    result.addFinding("API key is used for user authentication — API keys should only identify clients");
-                    result.addDetail("risk_level", "MEDIUM");
+                    addFinding(result,
+                        "API key is used for user authentication — API keys should only identify clients",
+                        "MEDIUM",
+                        "CWE-287: Improper Authentication",
+                        "Use OAuth2 tokens or session cookies for user auth; API keys are for client identification only.");
                     vulnerable = true;
                 }
 
@@ -124,16 +175,14 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
                 }
 
                 if (analysis != null) {
-                    analysis.setAnalyzer(
-                        vulnerable
-                            ? "Broken authentication issues suspected"
-                            : "No broken authentication issues detected"
-                    );
+                    String status = vulnerable
+                        ? ("Broken authentication issues suspected (dynamic: " + result.getDetails().get("dynamic_status") + ")")
+                        : "No broken authentication issues detected";
+                    analysis.setAnalyzer(status);
                 }
             }
         }
 
-        // Глобальный результат
         ModuleResult globalResult = new ModuleResult(foundIssues ? "ISSUES_FOUND" : "COMPLETED");
         globalResult.addDetail("summary", foundIssues
             ? "One or more endpoints show signs of broken authentication"
@@ -144,7 +193,70 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
             (foundIssues ? "Vulnerabilities suspected." : "No issues found."));
     }
 
-    // --- ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ---
+    private void addFinding(ModuleResult result, String message, String severity, String cwe, String remediation) {
+        result.addFinding(message);
+        result.addDetail("risk_level", severity);
+        result.addDetail("cwe_name", cwe);
+        result.addDetail("remediation", remediation);
+    }
+
+    // === DYNAMIC TESTS ===
+
+    private String performBruteForceTest(String method, String path, String baseUrl, DynamicContext ctx) {
+        ExecutionContext exec = ctx.getExecutionContext();
+        if (!exec.getKeys().contains("username")) return null;
+
+        String username = exec.get("username").toString();
+        List<String> weakPasswords = Arrays.asList("123456", "password", "qwerty", "admin", "letmein");
+
+        for (String pwd : weakPasswords) {
+            ObjectNode body = objectMapper.createObjectNode();
+            body.put("username", username);
+            body.put("password", pwd);
+
+            ApiCallResult res = ctx.getExecutor().callEndpointWithBody(method.toUpperCase(), path, body, exec);
+            if (res.isSuccess()) {
+                // Success with a weak password → vulnerability confirmed
+                return buildCurlCommand(method, baseUrl + path, body, ctx.getExecutor().getAccessToken(), exec);
+            }
+        }
+        return null;
+    }
+
+    private String performPasswordConfirmationBypassTest(String method, String path, String baseUrl, DynamicContext ctx) {
+        ObjectNode body = objectMapper.createObjectNode();
+        body.put("email", "attacker@example.com"); // attempt to change email
+
+        ApiCallResult res = ctx.getExecutor().callEndpointWithBody(method.toUpperCase(), path, body, ctx.getExecutionContext());
+        if (res.isSuccess()) {
+            return buildCurlCommand(method, baseUrl + path, body, ctx.getExecutor().getAccessToken(), ctx.getExecutionContext());
+        }
+        return null;
+    }
+
+    private String buildCurlCommand(String method, String url, JsonNode body, String token, ExecutionContext ctx) {
+        StringBuilder curl = new StringBuilder();
+        curl.append("curl -X ").append(method.toUpperCase()).append(" '").append(url).append("'");
+
+        if (token != null) {
+            curl.append(" \\\n  -H 'Authorization: Bearer ").append(token).append("'");
+        }
+
+        for (String key : ctx.getKeys()) {
+            if (key.startsWith("x-")) {
+                curl.append(" \\\n  -H '").append(key).append(": ").append(ctx.get(key)).append("'");
+            }
+        }
+
+        if (body != null) {
+            String jsonStr = body.toString().replace("'", "'\"'\"'"); // escape single quotes for shell
+            curl.append(" \\\n  -H 'Content-Type: application/json' \\\n  -d '").append(jsonStr).append("'");
+        }
+
+        return curl.toString();
+    }
+
+    // === HELPER METHODS ===
 
     private EndpointAnalysis findOrCreateAnalysis(ContainerApi container, String endpointName) {
         for (EndpointAnalysis ea : container.getAnalysisTable()) {
@@ -152,10 +264,10 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
                 return ea;
             }
         }
-        EndpointAnalysis newAnalysis = new EndpointAnalysis();
-        newAnalysis.setEndpointName(endpointName);
-        container.addEndpointAnalysis(newAnalysis);
-        return newAnalysis;
+        EndpointAnalysis ea = new EndpointAnalysis();
+        ea.setEndpointName(endpointName);
+        container.addEndpointAnalysis(ea);
+        return ea;
     }
 
     private boolean isAuthenticationEndpoint(String path) {
@@ -194,7 +306,7 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
         if (operation.has("description")) text += operation.get("description").asText().toLowerCase();
         return text.contains("rate") || text.contains("limit") || text.contains("lock") ||
                text.contains("captcha") || text.contains("throttle") || text.contains("retry") ||
-               text.contains("max attempt") || text.contains("brute");
+               text.contains("max attempt") || text.contains("brute") || text.contains("block");
     }
 
     private boolean mentionsJWT(JsonNode operation) {
@@ -220,31 +332,22 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
     }
 
     private boolean hasSecurityRequirement(JsonNode operation, JsonNode spec) {
-        // Локальная
         JsonNode localSec = operation.get("security");
         if (localSec != null && localSec.isArray() && !localSec.isEmpty()) {
             return true;
         }
-
-        // Глобальная
         JsonNode globalSec = spec.get("security");
-        if (globalSec != null && globalSec.isArray() && !globalSec.isEmpty()) {
-            return true;
-        }
-
-        return false;
+        return globalSec != null && globalSec.isArray() && !globalSec.isEmpty();
     }
 
     private boolean usesApiKeyForUserAuth(JsonNode operation, JsonNode spec) {
         JsonNode security = operation.get("security");
         if (security == null || !security.isArray() || security.isEmpty()) {
-            security = spec.get("security"); // fallback to global
+            security = spec.get("security");
         }
-
         if (security == null || !security.isArray() || security.isEmpty()) {
             return false;
         }
-
         JsonNode components = spec.get("components");
         if (components == null || !components.has("securitySchemes")) {
             return false;
@@ -266,5 +369,14 @@ public class BrokenAuthenticationCheck implements SecurityCheck {
             }
         }
         return false;
+    }
+
+    private String getBaseUrl(JsonNode spec, Configuration config) {
+        JsonNode servers = spec.get("servers");
+        if (servers != null && servers.isArray() && servers.size() > 0) {
+            return servers.get(0).get("url").asText().replaceAll("/+$", "");
+        }
+        String fromConfig = config.getAnalyzerBaseUrl();
+        return fromConfig != null ? fromConfig.trim().replaceAll("/+$", "") : "http://localhost";
     }
 }

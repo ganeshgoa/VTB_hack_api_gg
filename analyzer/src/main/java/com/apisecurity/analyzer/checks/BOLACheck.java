@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
 
 public class BOLACheck implements SecurityCheck {
 
+    // ⏱️ Задержка между запросами: 150–300 мс (чтобы не триггерить 429)
+    private static final int MIN_DELAY_MS = 50;
+    private static final int MAX_DELAY_MS = 200;
+
     @Override
     public String getName() {
         return "BOLA";
@@ -55,7 +59,6 @@ public class BOLACheck implements SecurityCheck {
                 EndpointAnalysis analysis = findOrCreateAnalysis(container, endpointName);
                 ModuleResult result = new ModuleResult("COMPLETED");
 
-                // 🔥 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: BOLA проверяется ДАЖЕ ЕСЛИ есть security
                 if (hasObjectIdParameter(path, operation)) {
                     result.addFinding("Potential BOLA: endpoint accesses object by ID — dynamic check required");
                     result.addDetail("risk_level", "HIGH");
@@ -64,13 +67,11 @@ public class BOLACheck implements SecurityCheck {
                     result.addDetail("cwe_name", "Authorization Bypass Through User-Controlled Key");
                     result.addDetail("remediation", "Validate that the authenticated user owns the requested resource. Do not trust client-provided IDs.");
 
-                    // ДИНАМИЧЕСКАЯ ПРОВЕРКА
                     if (dynamicContext != null && dynamicContext.isAvailable()) {
                         String poc = performDynamicBOLATest(method, path, baseUrl, dynamicContext);
                         if (poc != null) {
                             result.addDetail("dynamic_status", "CONFIRMED");
                             result.addDetail("proof_of_concept", poc);
-                            System.out.println("  💥 BOLA CONFIRMED on " + endpointName);
                         } else {
                             result.addDetail("dynamic_status", "NOT_CONFIRMED");
                         }
@@ -116,21 +117,32 @@ public class BOLACheck implements SecurityCheck {
         }
 
         String originalId = ctx.getExecutionContext().get(paramName).toString();
-        System.out.println("  🔬 Testing BOLA on " + path + " (original ID: " + originalId + ")");
 
-        // 5 попыток с мутацией
-        for (int i = 0; i < 5; i++) {
-            String mutatedId = mutateId(originalId);
-            if (mutatedId.equals(originalId)) continue;
+        Set<String> triedIds = new HashSet<>();
+        triedIds.add(originalId);
+
+        // 🔁 Максимум 5 уникальных попыток
+        for (int attempt = 0; attempt < 5; attempt++) {
+            String mutatedId = mutateId(originalId, triedIds);
+            if (mutatedId == null || mutatedId.isEmpty() || triedIds.contains(mutatedId)) {
+                continue;
+            }
+            triedIds.add(mutatedId);
 
             String testPath = path.replace("{" + paramName + "}", mutatedId);
-            if (testPath.contains("{")) continue; // пропускаем сложные пути
+            if (testPath.contains("{")) continue; // безопасность: пропускаем неполные пути
 
-            System.out.println("  🧪 Trying mutated ID: " + mutatedId);
 
             ApiCallResult res = ctx.getExecutor().callEndpoint(method.toUpperCase(), testPath, ctx.getExecutionContext());
+
+            // ⚠️ Если 429 — прерываем тест для этого эндпоинта (сервер нас блокирует)
+            if (res.statusCode == 429) {
+                System.out.println("  ⚠️ 429 Too Many Requests — stopping BOLA test for this endpoint to avoid ban");
+                break;
+            }
+
+            // ✅ Успех: 2xx → BOLA подтверждена
             if (res.isSuccess()) {
-                // 200 OK → BOLA подтверждена
                 String url = baseUrl + testPath;
                 Map<String, String> headers = new HashMap<>();
                 if (ctx.getExecutor().getAccessToken() != null) {
@@ -143,6 +155,68 @@ public class BOLACheck implements SecurityCheck {
                 }
                 return buildCurlCommand(method, url, headers);
             }
+
+            // ⏱️ Задержка между запросами
+            try {
+                int delay = MIN_DELAY_MS + new Random().nextInt(MAX_DELAY_MS - MIN_DELAY_MS + 1);
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+        return null;
+    }
+
+    private String mutateId(String id, Set<String> triedIds) {
+        if (id == null || id.isEmpty()) return null;
+        Random rand = new Random();
+
+        // 🔢 Сначала пробуем числовую мутацию
+        Pattern numPattern = Pattern.compile("\\d+");
+        Matcher matcher = numPattern.matcher(id);
+        if (matcher.find()) {
+            String numberStr = matcher.group();
+            try {
+                long num = Long.parseLong(numberStr);
+                // Пробуем +1, +10, -1, случайное
+                long[] offsets = {1, 10, -1, rand.nextInt(50) + 1};
+                for (long offset : offsets) {
+                    long mutatedNum = num + offset;
+                    if (mutatedNum > 0) {
+                        String mutated = id.replaceFirst("\\d+", String.valueOf(mutatedNum));
+                        if (!triedIds.contains(mutated)) {
+                            return mutated;
+                        }
+                    }
+                }
+            } catch (NumberFormatException ignored) {}
+        }
+
+        // 🔠 Если чисел нет — мутируем символы
+        for (int i = 0; i < 10; i++) { // до 10 попыток
+            char[] chars = id.toCharArray();
+            int idx = rand.nextInt(chars.length);
+            char c = chars[idx];
+            char newC = c;
+            if (Character.isDigit(c)) {
+                do {
+                    newC = (char) ('0' + rand.nextInt(10));
+                } while (newC == c);
+            } else if (Character.isLetter(c)) {
+                do {
+                    if (Character.isLowerCase(c)) {
+                        newC = (char) ('a' + rand.nextInt(26));
+                    } else {
+                        newC = (char) ('A' + rand.nextInt(26));
+                    }
+                } while (newC == c);
+            }
+            chars[idx] = newC;
+            String mutated = new String(chars);
+            if (!triedIds.contains(mutated)) {
+                return mutated;
+            }
         }
         return null;
     }
@@ -154,46 +228,6 @@ public class BOLACheck implements SecurityCheck {
             return matcher.group(1);
         }
         return null;
-    }
-
-    private String mutateId(String id) {
-        if (id == null || id.isEmpty()) return id;
-        Random rand = new Random();
-
-        // Ищем числа и увеличиваем
-        Pattern numPattern = Pattern.compile("\\d+");
-        Matcher matcher = numPattern.matcher(id);
-        if (matcher.find()) {
-            String numberStr = matcher.group();
-            try {
-                long num = Long.parseLong(numberStr);
-                long mutated = num + rand.nextInt(20) + 1; // +1..+20
-                return id.replaceFirst("\\d+", String.valueOf(mutated));
-            } catch (NumberFormatException ignored) {}
-        }
-
-        // Если нет чисел — мутируем случайный символ
-        char[] chars = id.toCharArray();
-        int idx = rand.nextInt(chars.length);
-        char c = chars[idx];
-        if (Character.isDigit(c)) {
-            char newC;
-            do {
-                newC = (char) ('0' + rand.nextInt(10));
-            } while (newC == c);
-            chars[idx] = newC;
-        } else if (Character.isLetter(c)) {
-            char newC;
-            do {
-                if (Character.isLowerCase(c)) {
-                    newC = (char) ('a' + rand.nextInt(26));
-                } else {
-                    newC = (char) ('A' + rand.nextInt(26));
-                }
-            } while (newC == c);
-            chars[idx] = newC;
-        }
-        return new String(chars);
     }
 
     private String buildCurlCommand(String method, String url, Map<String, String> headers) {
@@ -213,8 +247,6 @@ public class BOLACheck implements SecurityCheck {
         String fromConfig = config.getAnalyzerBaseUrl();
         return fromConfig != null ? fromConfig.trim().replaceAll("/+$", "") : "http://localhost";
     }
-
-    // === ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ (без изменений) ===
 
     private boolean isAuthenticationEndpoint(String path) {
         String p = path.toLowerCase();
@@ -237,7 +269,6 @@ public class BOLACheck implements SecurityCheck {
         if (path.matches(".*/\\{[^}]*[iI][dD][^}]*\\}.*")) {
             return true;
         }
-        // ... остальная логика (как у вас)
         JsonNode params = operation.get("parameters");
         if (params != null && params.isArray()) {
             for (JsonNode p : params) {
