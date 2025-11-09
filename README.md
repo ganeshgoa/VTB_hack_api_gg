@@ -23,6 +23,13 @@ mvn clean compile
 ```
 mvn clean package  
 ```
+Перед запуском необходимо добавить API KEY OpenRouter в config.json и Secret Client в params.json
+```
+"apiKey": "your_openrouter_api_key" # Указать API KEY от OpenRouter в config.json
+```
+```
+"client_secret": ["your_client_secret"] # Указать client_secret в params.json
+```
 5) Запускаем приложение:  
 ```
 java -jar app/target/app-1.0.0-jar-with-dependencies.jar --spec .\openapi_s.json --conf .\config.json # Windows
