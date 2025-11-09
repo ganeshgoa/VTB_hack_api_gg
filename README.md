@@ -23,7 +23,7 @@ mvn clean compile
 ```
 mvn clean package  
 ```
-Перед запуском необходимо добавить API KEY OpenRouter в config.json и Secret Client в params.json
+**Перед запуском необходимо добавить API KEY OpenRouter в config.json и Secret Client в params.json**
 ```
 "apiKey": "your_openrouter_api_key" # Указать API KEY от OpenRouter в config.json
 ```
